@@ -120,7 +120,7 @@ const designProducts: Product[] = [
       title: "DesignSystem Pro",
       price: "$99",
       categories: ["UI Kit", "Design"],
-      imageUrl: "/ipad6.jpg",
+      imageUrl: "ipad6.jpg",
       description:
         "Complete design system with 1000+ components, styles, and templates. Perfect for designers and developers working on large-scale projects.",
       specs: [
@@ -166,12 +166,12 @@ const gamingSetups: Product[] = [
     title: "Ultimate Battle Station",
     price: "$1299",
     categories: ["Gaming", "Desktop"],
-    imageUrl: "/setup.jpg",
+    imageUrl: "/Setup.jpg",
     productDetails: {
       title: "Ultimate Battle Station",
       price: "$1299",
       categories: ["Gaming", "Desktop"],
-      imageUrl: "/setup.jpg",
+      imageUrl: "/Setup.jpg",
       description:
         "Complete high-end gaming setup with RGB lighting, ergonomic features, and top-tier components. Designed for serious gamers and professionals.",
       specs: [
@@ -190,12 +190,12 @@ const gamingSetups: Product[] = [
     title: "RGB Dream Setup",
     price: "$899",
     categories: ["Gaming", "RGB"],
-    imageUrl: "/setup2.jpg",
+    imageUrl: "/Setup2.jpg",
     productDetails: {
       title: "RGB Dream Setup",
       price: "$899",
       categories: ["Gaming", "RGB"],
-      imageUrl: "/setup2.jpg",
+      imageUrl: "/Setup2.jpg",
       description:
         "Immersive gaming environment with synchronized RGB lighting across all components. Create the perfect atmosphere for any game.",
       specs: [
@@ -214,12 +214,12 @@ const gamingSetups: Product[] = [
     title: "Streamer Pro Bundle",
     price: "$1499",
     categories: ["Gaming", "Streaming"],
-    imageUrl: "/setup3.jpg",
+    imageUrl: "/Setup3.jpg",
     productDetails: {
       title: "Streamer Pro Bundle",
       price: "$1499",
       categories: ["Gaming", "Streaming"],
-      imageUrl: "/setup3.jpg",
+      imageUrl: "/Setup3.jpg",
       description:
         "Professional streaming setup with high-quality camera, microphone, lighting, and stream deck. Everything you need to start your streaming career.",
       specs: [
@@ -247,7 +247,7 @@ const codmStarterPacks: Product[] = [
       title: "CODM Beginner Pack",
       price: "$29",
       categories: ["Mobile", "Starter"],
-      imageUrl: "/ipad2.jpg",
+      imageUrl: "/Ipad2.jpg",
       description:
         "Essential starter pack for Call of Duty Mobile players. Includes weapon XP cards, credits, and exclusive skins to get your gameplay off to a strong start.",
       specs: [
@@ -271,7 +271,7 @@ const codmStarterPacks: Product[] = [
       title: "CODM Weapon Bundle",
       price: "$39",
       categories: ["Mobile", "Weapons"],
-      imageUrl: "/ipad.jpg",
+      imageUrl: "/Ipad.jpg",
       description:
         "Advanced weapon bundle featuring legendary and epic weapon blueprints with unique kill effects and designs for CODM players.",
       specs: [
@@ -295,7 +295,7 @@ const codmStarterPacks: Product[] = [
       title: "CODM Season Pass",
       price: "$25",
       categories: ["Mobile", "Battle Pass"],
-      imageUrl: "/ipad3.jpg",
+      imageUrl: "/Ipad3.jpg",
       description:
         "Premium Battle Pass for the current season of Call of Duty Mobile. Unlock exclusive rewards, skins, weapons, and more as you progress through tiers.",
       specs: [
@@ -317,7 +317,7 @@ const proGamerProducts: Product[] = [
     title: "Pro Gaming Mouse",
     price: "$129",
     categories: ["Hardware", "Peripheral"],
-    imageUrl: "/monitor.jpg",
+    imageUrl: "/Monitor.jpg",
     productDetails: {
       title: "Pro Gaming Mouse",
       price: "$129",
@@ -366,7 +366,7 @@ const proGamerProducts: Product[] = [
     title: "240Hz Gaming Monitor",
     price: "$349",
     categories: ["Hardware", "Display"],
-    imageUrl: "/pc.jpg",
+    imageUrl: "/PC.jpg",
     productDetails: {
       title: "240Hz Gaming Monitor",
       price: "$349",

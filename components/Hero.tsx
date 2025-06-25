@@ -7,18 +7,18 @@ import FancyButton from "./ui/magic-button";
 
 export function Hero() {
   const images = [
-    "/setup.jpg",
-    "/setup2.jpg",
-    "/setup3.jpg",
-    "/headset2.jpg",
-    "/headset3.jpg",
-    "/headset4.jpg",
-    "/monitor.jpg",
-    "/ipad.jpg",
-    "/ipad2.jpg",
-    "/ipad3.jpg",
-    "/ipad4.jpg",
-    "pc.jpg",
+    "/Setup.jpg",
+    "/Setup2.jpg",
+    "/Setup3.jpg",
+    "/Headset2.jpg",
+    "/Headset3.jpg",
+    "/Headset4.jpg",
+    "/Monitor.jpg",
+    "/Ipad.jpg",
+    "/Ipad2.jpg",
+    "/Ipad3.jpg",
+    "/Ipad4.jpg",
+    "PC.jpg",
   ];
 
   return (

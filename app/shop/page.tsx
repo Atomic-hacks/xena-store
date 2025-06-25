@@ -99,7 +99,7 @@ const mockProducts: Product[] = [
     name: "iPad Pro 11-inch (Used)",
     price: 649.99,
     originalPrice: 899.99,
-    images: [{ url: "/ipad3.jpg", alt: "iPad Pro 11-inch Used" }],
+    images: [{ url: "/Ipad3.jpg", alt: "iPad Pro 11-inch Used" }],
     inStock: true,
     category: "used",
     brand: "Apple",
