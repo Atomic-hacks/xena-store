@@ -1,6 +1,9 @@
 import type { Metadata } from "next";
 import { Orbitron, Rajdhani, Titillium_Web } from "next/font/google";
 import "./globals.css";
+import Navbar from "@/components/layout/Navbar";
+import Footer from "@/components/layout/Footer";
+
 
 // Gaming-inspired fonts
 const orbitron = Orbitron({
@@ -38,7 +41,9 @@ export default function RootLayout({
         <link rel="icon" href="/logo.jpg" />
       </head>
       <body className="antialiased text-white">
+        <Navbar/>
         {children}
+        <Footer/>
       </body>
     </html>
   );
