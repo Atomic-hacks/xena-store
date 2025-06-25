@@ -65,11 +65,11 @@ const ProductCard: React.FC<ProductCardProps> = ({
   const [, setImageLoaded] = useState(false);
   const [showActions, setShowActions] = useState(false);
 
-  // Responsive size configurations
+  // Improved responsive size configurations with better height management
   const sizeClasses = {
-    sm: "w-full max-w-xs h-80 sm:h-96",
-    md: "w-full max-w-sm h-96 sm:h-[450px]",
-    lg: "w-full max-w-md h-[450px] sm:h-[500px]",
+    sm: "w-full max-w-xs h-[420px] sm:h-[480px]",
+    md: "w-full max-w-sm h-[480px] sm:h-[520px] lg:h-[540px]",
+    lg: "w-full max-w-md h-[520px] sm:h-[560px] lg:h-[580px]",
   };
 
   // Safe property access
@@ -136,8 +136,8 @@ const ProductCard: React.FC<ProductCardProps> = ({
             transition={{ duration: 0.6, ease: "easeOut" }}
           />
 
-          {/* Product Image Section - Responsive height */}
-          <div className="relative w-full h-[65%] sm:h-[70%] overflow-hidden">
+          {/* Product Image Section - Better height distribution */}
+          <div className="relative w-full h-[60%] sm:h-[65%] overflow-hidden">
             {/* Image Container */}
             <motion.div
               className="relative w-full h-full"
@@ -155,23 +155,22 @@ const ProductCard: React.FC<ProductCardProps> = ({
               <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/20" />
             </motion.div>
 
-            {/* Floating Status Indicators - Responsive positioning */}
-            <div className="absolute top-2 left-2 sm:top-4 sm:left-4 flex flex-col gap-1 sm:gap-2">
+            {/* Floating Status Indicators - Better mobile positioning */}
+            <div className="absolute top-3 left-3 sm:top-4 sm:left-4 flex flex-col gap-1.5 sm:gap-2">
               {featured && (
                 <motion.div
-                  className="px-2 py-1 sm:px-3 sm:py-1 bg-black/60 backdrop-blur-md border border-fuchsia-500/30 text-fuchsia-300 text-xs font-medium rounded-full flex items-center gap-1"
+                  className="px-2.5 py-1 sm:px-3 sm:py-1.5 bg-black/70 backdrop-blur-md border border-fuchsia-500/40 text-fuchsia-300 text-[10px] sm:text-xs font-medium rounded-full flex items-center gap-1"
                   initial={{ scale: 0, rotate: -10 }}
                   animate={{ scale: 1, rotate: 0 }}
                   transition={{ delay: 0.2, type: "spring" }}
                 >
-                  <Zap size={8} className="sm:w-[10px] sm:h-[10px]" />
-                  <span className="hidden sm:inline">Featured</span>
-                  <span className="sm:hidden">★</span>
+                  <Zap size={10} className="sm:w-3 sm:h-3" />
+                  <span>Featured</span>
                 </motion.div>
               )}
               {hasDiscount && (
                 <motion.div
-                  className="px-2 py-1 sm:px-3 sm:py-1 bg-black/60 backdrop-blur-md border border-fuchsia-500/30 text-fuchsia-300 text-xs font-medium rounded-full"
+                  className="px-2.5 py-1 sm:px-3 sm:py-1.5 bg-black/70 backdrop-blur-md border border-fuchsia-500/40 text-fuchsia-300 text-[10px] sm:text-xs font-medium rounded-full"
                   initial={{ scale: 0, rotate: 10 }}
                   animate={{ scale: 1, rotate: 0 }}
                   transition={{ delay: 0.3, type: "spring" }}
@@ -181,53 +180,56 @@ const ProductCard: React.FC<ProductCardProps> = ({
               )}
             </div>
 
-            {/* Interactive Action Buttons - Responsive sizing */}
-            <AnimatePresence>
-              {showActions && (
-                <motion.div
-                  className="absolute top-2 right-2 sm:top-4 sm:right-4 flex flex-col gap-2 sm:gap-3"
-                  initial={{ opacity: 0, x: 20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  exit={{ opacity: 0, x: 20 }}
-                  transition={{ duration: 0.3, staggerChildren: 0.1 }}
-                >
-                  <motion.button
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      onToggleFavorite?.(product);
-                    }}
-                    className="w-8 h-8 sm:w-10 sm:h-10 bg-black/40 backdrop-blur-xl border border-white/10 rounded-lg sm:rounded-xl flex items-center justify-center text-white/70 hover:text-fuchsia-400 hover:border-fuchsia-500/30 transition-all duration-300"
-                    whileHover={{ scale: 1.1, rotate: 5 }}
-                    whileTap={{ scale: 0.9 }}
-                    initial={{ opacity: 0, y: -10 }}
-                    animate={{ opacity: 1, y: 0 }}
+            {/* Interactive Action Buttons - Always visible on mobile, hover on desktop */}
+            <div className="absolute top-3 right-3 sm:top-4 sm:right-4 flex flex-col gap-2">
+              {/* Mobile: Always show, Desktop: Show on hover */}
+              <AnimatePresence>
+                {(showActions || window.innerWidth < 640) && (
+                  <motion.div
+                    className="flex flex-col gap-2"
+                    initial={{ opacity: 0, x: 20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    exit={{ opacity: 0, x: 20 }}
+                    transition={{ duration: 0.3, staggerChildren: 0.05 }}
                   >
-                    <Heart size={12} className="sm:w-[14px] sm:h-[14px]" />
-                  </motion.button>
+                    <motion.button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        onToggleFavorite?.(product);
+                      }}
+                      className="w-9 h-9 sm:w-10 sm:h-10 bg-black/60 backdrop-blur-xl border border-white/20 rounded-lg sm:rounded-xl flex items-center justify-center text-white/80 hover:text-fuchsia-400 hover:border-fuchsia-500/40 hover:bg-black/70 transition-all duration-300"
+                      whileHover={{ scale: 1.1, rotate: 5 }}
+                      whileTap={{ scale: 0.9 }}
+                      initial={{ opacity: 0, y: -10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                    >
+                      <Heart size={14} className="sm:w-4 sm:h-4" />
+                    </motion.button>
 
-                  <motion.button
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      setShowQuickView(true);
-                    }}
-                    className="w-8 h-8 sm:w-10 sm:h-10 bg-black/40 backdrop-blur-xl border border-white/10 rounded-lg sm:rounded-xl flex items-center justify-center text-white/70 hover:text-fuchsia-400 hover:border-fuchsia-500/30 transition-all duration-300"
-                    whileHover={{ scale: 1.1, rotate: -5 }}
-                    whileTap={{ scale: 0.9 }}
-                    initial={{ opacity: 0, y: -10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.1 }}
-                  >
-                    <Eye size={12} className="sm:w-[14px] sm:h-[14px]" />
-                  </motion.button>
-                </motion.div>
-              )}
-            </AnimatePresence>
+                    <motion.button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setShowQuickView(true);
+                      }}
+                      className="w-9 h-9 sm:w-10 sm:h-10 bg-black/60 backdrop-blur-xl border border-white/20 rounded-lg sm:rounded-xl flex items-center justify-center text-white/80 hover:text-fuchsia-400 hover:border-fuchsia-500/40 hover:bg-black/70 transition-all duration-300"
+                      whileHover={{ scale: 1.1, rotate: -5 }}
+                      whileTap={{ scale: 0.9 }}
+                      initial={{ opacity: 0, y: -10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: 0.05 }}
+                    >
+                      <Eye size={14} className="sm:w-4 sm:h-4" />
+                    </motion.button>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
 
             {/* Stock Status Overlay */}
             {!inStock && (
               <div className="absolute inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center">
-                <div className="bg-black/80 backdrop-blur-md border border-white/20 px-3 py-2 sm:px-4 sm:py-2 rounded-xl sm:rounded-2xl">
-                  <span className="text-white/80 font-medium text-xs sm:text-sm">
+                <div className="bg-black/80 backdrop-blur-md border border-white/20 px-4 py-2 sm:px-5 sm:py-3 rounded-xl sm:rounded-2xl">
+                  <span className="text-white/90 font-medium text-xs sm:text-sm">
                     Out of Stock
                   </span>
                 </div>
@@ -235,72 +237,82 @@ const ProductCard: React.FC<ProductCardProps> = ({
             )}
           </div>
 
-          {/* Product Info Section - Responsive height and padding */}
-          <div className="relative h-[35%] sm:h-[30%] p-3 sm:p-6 flex flex-col justify-between">
+          {/* Product Info Section - Better height and spacing management */}
+          <div className="relative h-[40%] sm:h-[35%] p-4 sm:p-5 lg:p-6 flex flex-col">
             {/* Info Background */}
-            <div className="absolute inset-0 bg-black/40 backdrop-blur-xl" />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
+            <div className="absolute inset-0 bg-black/50 backdrop-blur-xl" />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent" />
 
-            <div className="relative z-10 flex-1 flex flex-col justify-between min-h-0">
+            <div className="relative z-10 flex flex-col h-full">
               {/* Top Section - Category and Name */}
-              <div className="flex-shrink-0">
+              <div className="flex-shrink-0 mb-2 sm:mb-3">
                 {displayCategory && (
-                  <p className="text-xs text-white/50 mb-1 font-medium tracking-wider uppercase truncate">
+                  <p className="text-[10px] sm:text-xs text-white/60 mb-1 sm:mb-1.5 font-medium tracking-wider uppercase truncate">
                     {displayCategory}
                   </p>
                 )}
-                <h3 className="font-semibold text-white text-sm sm:text-lg leading-tight mb-1 sm:mb-2 line-clamp-2 overflow-hidden">
+                <h3 className="font-semibold text-white text-sm sm:text-base lg:text-lg leading-tight mb-1.5 sm:mb-2 line-clamp-2">
                   {name}
                 </h3>
 
-                {/* Rating - Compact and responsive */}
+                {/* Rating - More compact */}
                 {rating > 0 && (
-                  <div className="flex items-center gap-1 sm:gap-2 mb-1 sm:mb-2">
-                    <div className="flex items-center">
+                  <div className="flex items-center gap-1.5 mb-1.5 sm:mb-2">
+                    <div className="flex items-center gap-0.5">
                       {[...Array(5)].map((_, i) => (
                         <Star
                           key={i}
-                          size={8}
-                          className={`sm:w-[10px] sm:h-[10px] ${
+                          size={10}
+                          className={`sm:w-3 sm:h-3 ${
                             i < Math.floor(rating)
                               ? "fill-fuchsia-400 text-fuchsia-400"
-                              : "text-white/20"
+                              : "text-white/30"
                           }`}
                         />
                       ))}
                     </div>
-                    <span className="text-xs text-white/50">
+                    <span className="text-[10px] sm:text-xs text-white/60 font-medium">
                       ({reviewCount})
                     </span>
                   </div>
                 )}
               </div>
 
-              {/* Bottom Section - Price and Cart */}
-              <div className="flex items-center justify-between flex-shrink-0 mt-auto">
-                <div className="flex items-baseline gap-1 sm:gap-2 min-w-0 flex-1">
-                  <span className="font-bold text-white text-lg sm:text-xl truncate">
-                    ${price.toFixed(2)}
-                  </span>
-                  {hasDiscount && originalPrice && (
-                    <span className="text-xs sm:text-sm text-white/40 line-through">
-                      ${originalPrice.toFixed(2)}
+              {/* Bottom Section - Price and Cart - Push to bottom */}
+              <div className="flex items-end justify-between mt-auto">
+                <div className="flex flex-col gap-1 min-w-0 flex-1">
+                  <div className="flex items-baseline gap-2">
+                    <span className="font-bold text-white text-lg sm:text-xl lg:text-2xl">
+                      ${price.toFixed(2)}
                     </span>
-                  )}
+                    {hasDiscount && originalPrice && (
+                      <span className="text-xs sm:text-sm text-white/50 line-through">
+                        ${originalPrice.toFixed(2)}
+                      </span>
+                    )}
+                  </div>
+                  {/* Stock info for mobile */}
+                  {inStock &&
+                    product.stockQuantity &&
+                    product.stockQuantity <= 10 && (
+                      <span className="text-[10px] sm:text-xs text-fuchsia-400 font-medium">
+                        Only {product.stockQuantity} left
+                      </span>
+                    )}
                 </div>
 
-                {/* Interactive Add to Cart - Responsive sizing */}
+                {/* Interactive Add to Cart - Better mobile sizing */}
                 <motion.button
                   onClick={(e) => {
                     e.stopPropagation();
                     if (inStock) onAddToCart?.(product);
                   }}
                   className={`
-                    relative overflow-hidden w-10 h-10 sm:w-12 sm:h-12 rounded-xl sm:rounded-2xl flex items-center justify-center backdrop-blur-xl border transition-all duration-300 flex-shrink-0
+                    relative overflow-hidden w-12 h-12 sm:w-14 sm:h-14 rounded-xl sm:rounded-2xl flex items-center justify-center backdrop-blur-xl border transition-all duration-300 flex-shrink-0
                     ${
                       inStock
-                        ? "bg-fuchsia-500/20 border-fuchsia-500/40 text-fuchsia-300 hover:bg-fuchsia-500/30 hover:border-fuchsia-400/60 hover:shadow-lg hover:shadow-fuchsia-500/25"
-                        : "bg-white/5 border-white/10 text-white/30 cursor-not-allowed"
+                        ? "bg-fuchsia-500/25 border-fuchsia-500/50 text-fuchsia-300 hover:bg-fuchsia-500/35 hover:border-fuchsia-400/70 hover:shadow-lg hover:shadow-fuchsia-500/30"
+                        : "bg-white/10 border-white/20 text-white/40 cursor-not-allowed"
                     }
                   `}
                   whileHover={inStock ? { scale: 1.05 } : {}}
@@ -310,15 +322,15 @@ const ProductCard: React.FC<ProductCardProps> = ({
                   {/* Ripple effect */}
                   {inStock && (
                     <motion.div
-                      className="absolute inset-0 bg-fuchsia-400/20 rounded-xl sm:rounded-2xl"
+                      className="absolute inset-0 bg-fuchsia-400/25 rounded-xl sm:rounded-2xl"
                       initial={{ scale: 0, opacity: 1 }}
                       whileHover={{ scale: 1.5, opacity: 0 }}
                       transition={{ duration: 0.4 }}
                     />
                   )}
                   <ShoppingCart
-                    size={14}
-                    className="relative z-10 sm:w-4 sm:h-4"
+                    size={16}
+                    className="relative z-10 sm:w-5 sm:h-5"
                   />
                 </motion.button>
               </div>
@@ -347,7 +359,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
   );
 };
 
-// Quick View Modal Component - Updated for better responsiveness
+// Quick View Modal Component - Improved mobile layout
 interface QuickViewModalProps {
   isOpen: boolean;
   onClose: () => void;
@@ -394,14 +406,14 @@ const QuickViewModal: React.FC<QuickViewModalProps> = ({
     <AnimatePresence>
       {isOpen && (
         <motion.div
-          className="fixed inset-0 bg-black/80 backdrop-blur-2xl flex items-center justify-center z-50 p-2 sm:p-4"
+          className="fixed inset-0 bg-black/85 backdrop-blur-2xl flex items-center justify-center z-50 p-3 sm:p-4"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           onClick={onClose}
         >
           <motion.div
-            className="relative bg-black/60 backdrop-blur-3xl border border-white/10 rounded-2xl sm:rounded-3xl overflow-hidden w-full max-w-xs sm:max-w-4xl max-h-[95vh] sm:max-h-[90vh] shadow-2xl"
+            className="relative bg-black/70 backdrop-blur-3xl border border-white/15 rounded-2xl sm:rounded-3xl overflow-hidden w-full max-w-sm sm:max-w-4xl max-h-[95vh] shadow-2xl"
             initial={{ scale: 0.8, opacity: 0, y: 50 }}
             animate={{ scale: 1, opacity: 1, y: 0 }}
             exit={{ scale: 0.8, opacity: 0, y: 50 }}
@@ -409,196 +421,200 @@ const QuickViewModal: React.FC<QuickViewModalProps> = ({
             onClick={(e) => e.stopPropagation()}
           >
             {/* Subtle fuchsia glow */}
-            <div className="absolute inset-0 bg-gradient-to-br from-fuchsia-500/5 via-transparent to-fuchsia-500/10" />
+            <div className="absolute inset-0 bg-gradient-to-br from-fuchsia-500/8 via-transparent to-fuchsia-500/12" />
 
-            {/* Close Button - Responsive positioning */}
+            {/* Close Button */}
             <button
               onClick={onClose}
-              className="absolute right-3 top-3 sm:right-6 sm:top-6 z-20 w-10 h-10 sm:w-12 sm:h-12 bg-black/40 hover:bg-black/60 backdrop-blur-xl border border-white/20 rounded-xl sm:rounded-2xl flex items-center justify-center text-white/70 hover:text-white transition-all duration-300"
+              className="absolute right-4 top-4 sm:right-6 sm:top-6 z-20 w-10 h-10 sm:w-12 sm:h-12 bg-black/60 hover:bg-black/80 backdrop-blur-xl border border-white/25 rounded-xl sm:rounded-2xl flex items-center justify-center text-white/80 hover:text-white transition-all duration-300"
             >
-              <X size={16} className="sm:w-5 sm:h-5" />
+              <X size={18} className="sm:w-5 sm:h-5" />
             </button>
 
-            <div className="flex flex-col lg:flex-row max-h-[95vh] sm:max-h-[90vh]">
-              {/* Image Section - Responsive height */}
-              <div className="relative w-full lg:w-1/2 h-64 sm:h-80 lg:h-[600px]">
+            <div className="flex flex-col lg:flex-row max-h-[95vh]">
+              {/* Image Section */}
+              <div className="relative w-full lg:w-1/2 h-72 sm:h-80 lg:h-[600px]">
                 <img
                   src={mainImage}
                   alt={images[0]?.alt || name}
                   className="w-full h-full object-cover"
                 />
-                <div className="absolute inset-0 bg-gradient-to-b from-transparent to-black/20" />
+                <div className="absolute inset-0 bg-gradient-to-b from-transparent to-black/25" />
 
-                {/* Status badges - Responsive positioning */}
-                <div className="absolute top-3 left-3 sm:top-6 sm:left-6 flex flex-col gap-2">
+                {/* Status badges */}
+                <div className="absolute top-4 left-4 sm:top-6 sm:left-6 flex flex-col gap-2">
                   {hasDiscount && (
-                    <span className="px-3 py-1 sm:px-4 sm:py-2 bg-black/60 backdrop-blur-md border border-fuchsia-500/30 text-fuchsia-300 rounded-xl sm:rounded-2xl text-xs sm:text-sm font-medium">
+                    <span className="px-3 py-1.5 sm:px-4 sm:py-2 bg-black/70 backdrop-blur-md border border-fuchsia-500/40 text-fuchsia-300 rounded-xl sm:rounded-2xl text-xs sm:text-sm font-medium">
                       -{discountPercent}% OFF
                     </span>
                   )}
                   {!inStock && (
-                    <span className="px-3 py-1 sm:px-4 sm:py-2 bg-black/60 backdrop-blur-md border border-white/20 text-white/70 rounded-xl sm:rounded-2xl text-xs sm:text-sm font-medium">
+                    <span className="px-3 py-1.5 sm:px-4 sm:py-2 bg-black/70 backdrop-blur-md border border-white/25 text-white/80 rounded-xl sm:rounded-2xl text-xs sm:text-sm font-medium">
                       Out of Stock
                     </span>
                   )}
                 </div>
               </div>
 
-              {/* Content Section - Responsive padding and scrolling */}
-              <div className="relative w-full lg:w-1/2 p-4 sm:p-8 flex flex-col overflow-y-auto">
-                {/* Category */}
-                {displayCategory && (
-                  <span className="text-xs sm:text-sm text-white/50 mb-2 sm:mb-3 font-medium tracking-wider uppercase">
-                    {displayCategory}
-                  </span>
-                )}
-
-                {/* Title - Responsive sizing */}
-                <h2 className="text-xl sm:text-3xl font-bold text-white mb-3 sm:mb-4 leading-tight">
-                  {name}
-                </h2>
-
-                {/* Rating - Responsive sizing */}
-                {rating > 0 && (
-                  <div className="flex items-center gap-2 sm:gap-3 mb-4 sm:mb-6">
-                    <div className="flex items-center">
-                      {[...Array(5)].map((_, i) => (
-                        <Star
-                          key={i}
-                          size={14}
-                          className={`sm:w-4 sm:h-4 ${
-                            i < Math.floor(rating)
-                              ? "fill-fuchsia-400 text-fuchsia-400"
-                              : "text-white/20"
-                          }`}
-                        />
-                      ))}
-                    </div>
-                    <span className="text-sm sm:text-base text-white/60">
-                      {rating} ({reviewCount} reviews)
+              {/* Content Section - Better mobile scrolling */}
+              <div className="relative w-full lg:w-1/2 flex flex-col overflow-hidden">
+                <div className="p-5 sm:p-6 lg:p-8 overflow-y-auto flex-1">
+                  {/* Category */}
+                  {displayCategory && (
+                    <span className="text-xs sm:text-sm text-white/60 mb-2 sm:mb-3 font-medium tracking-wider uppercase block">
+                      {displayCategory}
                     </span>
-                  </div>
-                )}
+                  )}
 
-                {/* Price - Responsive sizing */}
-                <div className="mb-4 sm:mb-6">
-                  <div className="flex items-center gap-2 sm:gap-4">
-                    <span className="text-2xl sm:text-3xl font-bold text-white">
-                      ${price.toFixed(2)}
-                    </span>
-                    {hasDiscount && originalPrice && (
-                      <span className="text-lg sm:text-xl text-white/40 line-through">
-                        ${originalPrice.toFixed(2)}
+                  {/* Title */}
+                  <h2 className="text-xl sm:text-2xl lg:text-3xl font-bold text-white mb-3 sm:mb-4 leading-tight">
+                    {name}
+                  </h2>
+
+                  {/* Rating */}
+                  {rating > 0 && (
+                    <div className="flex items-center gap-3 mb-4 sm:mb-5">
+                      <div className="flex items-center gap-1">
+                        {[...Array(5)].map((_, i) => (
+                          <Star
+                            key={i}
+                            size={16}
+                            className={`sm:w-4 sm:h-4 ${
+                              i < Math.floor(rating)
+                                ? "fill-fuchsia-400 text-fuchsia-400"
+                                : "text-white/25"
+                            }`}
+                          />
+                        ))}
+                      </div>
+                      <span className="text-sm sm:text-base text-white/70">
+                        {rating} ({reviewCount} reviews)
                       </span>
+                    </div>
+                  )}
+
+                  {/* Price */}
+                  <div className="mb-5 sm:mb-6">
+                    <div className="flex items-center gap-3 sm:gap-4">
+                      <span className="text-2xl sm:text-3xl font-bold text-white">
+                        ${price.toFixed(2)}
+                      </span>
+                      {hasDiscount && originalPrice && (
+                        <span className="text-lg sm:text-xl text-white/50 line-through">
+                          ${originalPrice.toFixed(2)}
+                        </span>
+                      )}
+                    </div>
+                    {stockQuantity && stockQuantity <= 10 && inStock && (
+                      <p className="text-fuchsia-400 text-sm mt-2 font-medium">
+                        Only {stockQuantity} left in stock
+                      </p>
                     )}
                   </div>
-                  {stockQuantity && stockQuantity <= 10 && inStock && (
-                    <p className="text-fuchsia-400 text-sm mt-2 font-medium">
-                      Only {stockQuantity} left in stock
-                    </p>
+
+                  {/* Description */}
+                  <p className="text-sm sm:text-base text-white/75 mb-5 sm:mb-6 leading-relaxed">
+                    {description}
+                  </p>
+
+                  {/* Specifications */}
+                  {specifications.length > 0 && (
+                    <div className="mb-5 sm:mb-6">
+                      <h4 className="font-semibold text-white mb-3 text-sm sm:text-base">
+                        Specifications
+                      </h4>
+                      <div className="space-y-2 bg-white/5 backdrop-blur-sm rounded-xl sm:rounded-2xl p-4 border border-white/15">
+                        {specifications.slice(0, 4).map((spec, index) => (
+                          <div
+                            key={index}
+                            className="flex justify-between items-center py-1"
+                          >
+                            <span className="text-white/70 text-sm">
+                              {spec.key}:
+                            </span>
+                            <span className="text-white font-medium text-sm">
+                              {spec.value}
+                            </span>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Quantity Selector */}
+                  {inStock && (
+                    <div className="mb-6">
+                      <span className="text-white/70 text-sm mb-3 block">
+                        Quantity
+                      </span>
+                      <div className="flex items-center gap-4">
+                        <button
+                          onClick={() => setQuantity(Math.max(1, quantity - 1))}
+                          className="w-10 h-10 bg-white/15 hover:bg-white/25 backdrop-blur-xl border border-white/25 rounded-xl flex items-center justify-center text-white/80 hover:text-white transition-all duration-300"
+                        >
+                          <Minus size={16} />
+                        </button>
+                        <span className="text-white font-medium w-12 text-center">
+                          {quantity}
+                        </span>
+                        <button
+                          onClick={() => setQuantity(quantity + 1)}
+                          className="w-10 h-10 bg-white/15 hover:bg-white/25 backdrop-blur-xl border border-white/25 rounded-xl flex items-center justify-center text-white/80 hover:text-white transition-all duration-300"
+                        >
+                          <Plus size={16} />
+                        </button>
+                      </div>
+                    </div>
                   )}
                 </div>
 
-                {/* Description - Responsive text */}
-                <p className="text-sm sm:text-base text-white/70 mb-4 sm:mb-6 leading-relaxed">
-                  {description}
-                </p>
+                {/* Actions - Fixed at bottom */}
+                <div className="p-5 sm:p-6 lg:p-8 pt-0 border-t border-white/10 bg-black/20 backdrop-blur-xl">
+                  <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
+                    <motion.button
+                      onClick={() => inStock && onAddToCart?.(product)}
+                      className={`
+                        flex-1 py-3.5 sm:py-4 rounded-xl sm:rounded-2xl flex items-center justify-center gap-3 font-semibold transition-all duration-300 backdrop-blur-xl border
+                        ${
+                          inStock
+                            ? "bg-fuchsia-500/25 border-fuchsia-500/50 text-fuchsia-300 hover:bg-fuchsia-500/35 hover:border-fuchsia-400/70 hover:shadow-lg hover:shadow-fuchsia-500/25"
+                            : "bg-white/10 border-white/20 text-white/50 cursor-not-allowed"
+                        }
+                      `}
+                      disabled={!inStock}
+                      whileHover={inStock ? { scale: 1.02 } : {}}
+                      whileTap={inStock ? { scale: 0.98 } : {}}
+                    >
+                      <ShoppingCart size={18} />
+                      {inStock ? "Add to Cart" : "Out of Stock"}
+                    </motion.button>
 
-                {/* Specifications - Responsive layout */}
-                {specifications.length > 0 && (
-                  <div className="mb-4 sm:mb-6">
-                    <h4 className="font-semibold text-white mb-2 sm:mb-3 text-sm sm:text-base">
-                      Specifications
-                    </h4>
-                    <div className="space-y-2 bg-white/5 backdrop-blur-sm rounded-xl sm:rounded-2xl p-3 sm:p-4 border border-white/10">
-                      {specifications.slice(0, 4).map((spec, index) => (
-                        <div
-                          key={index}
-                          className="flex justify-between items-center py-1"
-                        >
-                          <span className="text-white/60 text-xs sm:text-sm">
-                            {spec.key}:
-                          </span>
-                          <span className="text-white font-medium text-xs sm:text-sm">
-                            {spec.value}
-                          </span>
-                        </div>
-                      ))}
-                    </div>
+                    <motion.button
+                      onClick={() => onToggleFavorite?.(product)}
+                      className="w-14 h-14 sm:w-16 sm:h-16 flex items-center justify-center rounded-xl sm:rounded-2xl bg-white/15 backdrop-blur-xl border border-white/25 hover:border-fuchsia-500/50 hover:bg-white/25 transition-all duration-300 flex-shrink-0"
+                      whileHover={{ scale: 1.05 }}
+                      whileTap={{ scale: 0.95 }}
+                    >
+                      <Heart
+                        size={18}
+                        className="text-white/80 hover:text-fuchsia-400"
+                      />
+                    </motion.button>
                   </div>
-                )}
 
-                {/* Quantity Selector - Responsive sizing */}
-                {inStock && (
-                  <div className="mb-4 sm:mb-6">
-                    <span className="text-white/70 text-sm mb-2 block">
-                      Quantity
-                    </span>
-                    <div className="flex items-center gap-3">
-                      <button
-                        onClick={() => setQuantity(Math.max(1, quantity - 1))}
-                        className="w-8 h-8 sm:w-10 sm:h-10 bg-white/10 hover:bg-white/20 backdrop-blur-xl border border-white/20 rounded-lg sm:rounded-xl flex items-center justify-center text-white/70 hover:text-white transition-all duration-300"
-                      >
-                        <Minus size={14} className="sm:w-4 sm:h-4" />
-                      </button>
-                      <span className="text-white font-medium w-8 sm:w-12 text-center text-sm sm:text-base">
-                        {quantity}
-                      </span>
-                      <button
-                        onClick={() => setQuantity(quantity + 1)}
-                        className="w-8 h-8 sm:w-10 sm:h-10 bg-white/10 hover:bg-white/20 backdrop-blur-xl border border-white/20 rounded-lg sm:rounded-xl flex items-center justify-center text-white/70 hover:text-white transition-all duration-300"
-                      >
-                        <Plus size={14} className="sm:w-4 sm:h-4" />
-                      </button>
-                    </div>
-                  </div>
-                )}
-
-                {/* Actions - Responsive layout */}
-                <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 mt-auto">
-                  <motion.button
-                    onClick={() => inStock && onAddToCart?.(product)}
-                    className={`
-                      flex-1 py-3 sm:py-4 rounded-xl sm:rounded-2xl flex items-center justify-center gap-2 sm:gap-3 font-semibold transition-all duration-300 backdrop-blur-xl border text-sm sm:text-base
-                      ${
-                        inStock
-                          ? "bg-fuchsia-500/20 border-fuchsia-500/40 text-fuchsia-300 hover:bg-fuchsia-500/30 hover:border-fuchsia-400/60 hover:shadow-lg hover:shadow-fuchsia-500/20"
-                          : "bg-white/5 border-white/10 text-white/40 cursor-not-allowed"
-                      }
-                    `}
-                    disabled={!inStock}
-                    whileHover={inStock ? { scale: 1.02 } : {}}
-                    whileTap={inStock ? { scale: 0.98 } : {}}
-                  >
-                    <ShoppingCart size={18} className="sm:w-5 sm:h-5" />
-                    {inStock ? "Add to Cart" : "Out of Stock"}
-                  </motion.button>
-
-                  <motion.button
-                    onClick={() => onToggleFavorite?.(product)}
-                    className="w-12 h-12 sm:w-16 sm:h-16 flex items-center justify-center rounded-xl sm:rounded-2xl bg-white/10 backdrop-blur-xl border border-white/20 hover:border-fuchsia-500/40 hover:bg-white/20 transition-all duration-300 flex-shrink-0"
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
-                  >
-                    <Heart
-                      size={18}
-                      className="sm:w-5 sm:h-5 text-white/70 hover:text-fuchsia-400"
-                    />
-                  </motion.button>
+                  {/* View Details */}
+                  {onViewDetails && (
+                    <button
+                      onClick={() => {
+                        onViewDetails(product);
+                        onClose();
+                      }}
+                      className="text-center text-fuchsia-400 hover:text-fuchsia-300 font-medium mt-4 transition-colors duration-300 text-sm w-full"
+                    >
+                      View Full Details →
+                    </button>
+                  )}
                 </div>
-
-                {/* View Details - Responsive text */}
-                {onViewDetails && (
-                  <button
-                    onClick={() => {
-                      onViewDetails(product);
-                      onClose();
-                    }}
-                    className="text-center text-fuchsia-400 hover:text-fuchsia-300 font-medium mt-3 sm:mt-4 transition-colors duration-300 text-sm sm:text-base"
-                  >
-                    View Full Details →
-                  </button>
-                )}
               </div>
             </div>
           </motion.div>
