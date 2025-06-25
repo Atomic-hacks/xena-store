@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   Heart,
@@ -64,6 +64,22 @@ const ProductCard: React.FC<ProductCardProps> = ({
   const [showQuickView, setShowQuickView] = useState(false);
   const [, setImageLoaded] = useState(false);
   const [showActions, setShowActions] = useState(false);
+
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 640);
+    };
+
+    // Initial check
+    handleResize();
+
+    // Optional: listen for window resize
+    window.addEventListener("resize", handleResize);
+
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   // Improved responsive size configurations with better height management
   const sizeClasses = {
@@ -184,7 +200,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
             <div className="absolute top-3 right-3 sm:top-4 sm:right-4 flex flex-col gap-2">
               {/* Mobile: Always show, Desktop: Show on hover */}
               <AnimatePresence>
-                {(showActions || window.innerWidth < 640) && (
+                {(showActions || isMobile) && (
                   <motion.div
                     className="flex flex-col gap-2"
                     initial={{ opacity: 0, x: 20 }}
