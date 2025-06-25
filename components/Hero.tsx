@@ -23,7 +23,7 @@ export function Hero() {
 
   return (
     <div className="relative h-screen">
-      <ImagesSlider className="h-full" images={images}>
+      <ImagesSlider className="h-screen" images={images}>
         <div className="relative z-50 h-full flex items-center px-8 lg:px-16">
           <div className="max-w-7xl mx-auto w-full">
             <div className="max-w-3xl">
@@ -47,7 +47,7 @@ export function Hero() {
                   premium goods and curated essentials.
                 </p>
 
-                <div className="flex flex-col sm:flex-row gap-4 mt-8">
+                <div className="flex flex-col sm:flex-row w-60 sm:w-auto gap-4 mt-8">
                   <FancyButton title="Get Started" />
                   <FancyButton title="Browse Categories" />
                 </div>

@@ -242,7 +242,7 @@ const codmStarterPacks: Product[] = [
     title: "CODM Beginner Pack",
     price: "$29",
     categories: ["Mobile", "Starter"],
-    imageUrl: "/ipad2.jpg",
+    imageUrl: "/Ipad2.jpg",
     productDetails: {
       title: "CODM Beginner Pack",
       price: "$29",
@@ -266,7 +266,7 @@ const codmStarterPacks: Product[] = [
     title: "CODM Weapon Bundle",
     price: "$39",
     categories: ["Mobile", "Weapons"],
-    imageUrl: "/ipad.jpg",
+    imageUrl: "/Ipad.jpg",
     productDetails: {
       title: "CODM Weapon Bundle",
       price: "$39",
@@ -290,12 +290,12 @@ const codmStarterPacks: Product[] = [
     title: "CODM Season Pass",
     price: "$25",
     categories: ["Mobile", "Battle Pass"],
-    imageUrl: "/ipad33.jpg",
+    imageUrl: "/Ipad3.jpg",
     productDetails: {
       title: "CODM Season Pass",
       price: "$25",
       categories: ["Mobile", "Battle Pass"],
-      imageUrl: "/ipad33.jpg",
+      imageUrl: "/ipad3.jpg",
       description:
         "Premium Battle Pass for the current season of Call of Duty Mobile. Unlock exclusive rewards, skins, weapons, and more as you progress through tiers.",
       specs: [
@@ -442,12 +442,12 @@ const ProductSection = ({
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {products.map((product, index) => (
           <ProductCard
-          key={index}
-        product={mapToProductCardFormat(product, index)}
-        onAddToCart={handleAddToCart}
-        onToggleFavorite={handleToggleFavorite}
-        onViewDetails={handleViewDetails}
-      />
+            key={index}
+            product={mapToProductCardFormat(product, index)}
+            onAddToCart={handleAddToCart}
+            onToggleFavorite={handleToggleFavorite}
+            onViewDetails={handleViewDetails}
+          />
         ))}
       </div>
     </div>
