@@ -38,13 +38,6 @@ body {
   color: var(--foreground);
 }
 
-h1,
-h2 {
-  font-family: var(--font-azonix), "Exo 2", sans-serif;
-  letter-spacing: 0.01em;
-  line-height: 1.08;
-}
-
 p,
 li,
 dd,

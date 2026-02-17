@@ -1,116 +1,104 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
 import { ProductCardDTO } from "@/lib/store";
 import { Currency } from "@/components/store/Currency";
 import { AddToCartButton } from "@/components/store/AddToCartButton";
-import { glassStyles } from "@/components/ui/glass";
-import { ConditionPill, DealPill, DiscountPill, StatusPill } from "@/components/store/Pills";
+import { FaCartPlus } from "react-icons/fa";
 
-export function ProductTile({
-  product,
-  showStatus = false,
-}: {
+type ProductTileProps = {
   product: ProductCardDTO;
-  showStatus?: boolean;
-}) {
-  const [opening, setOpening] = useState(false);
-  const hasDiscount = product.finalPrice < product.price;
-  const discountPercent = hasDiscount
-    ? product.discountType === "PERCENT"
-      ? product.discountValue
-      : Math.round(((product.price - product.finalPrice) / Math.max(1, product.price)) * 100)
-    : 0;
+};
 
-  const quickSpecs = product.tags.filter(Boolean).slice(0, 3);
-  const mobilePill = hasDiscount
-    ? "Sale"
-    : product.stock > 0
-    ? "In stock"
-    : product.condition === "NEW"
-    ? "New"
-    : null;
+function getStatus(product: ProductCardDTO): { label: string; tone: string } {
+  if (product.isOnSale) {
+    return {
+      label: "Sale",
+      tone: "border-violet-300/45 bg-violet-400/20 text-violet-100",
+    };
+  }
+
+  if (product.stock > 0) {
+    return {
+      label: "In Stock",
+      tone: "border-emerald-300/30 bg-emerald-500/15 text-emerald-100",
+    };
+  }
+
+  if (product.condition === "NEW") {
+    return {
+      label: "New",
+      tone: "border-sky-300/30 bg-sky-500/15 text-sky-100",
+    };
+  }
+
+  return {
+    label: "Limited",
+    tone: "border-white/25 bg-white/10 text-white/90",
+  };
+}
+
+export function ProductTile({ product }: ProductTileProps) {
+  const status = getStatus(product);
 
   return (
-    <article
-      className={`group relative flex h-full flex-col overflow-hidden max-md:rounded-[18px] ${glassStyles.card} ${glassStyles.interactive}`}
-    >
-      <Link
-        href={`/products/${product.slug}`}
-        className="block"
-        onClick={() => setOpening(true)}
-      >
-        <div className="relative aspect-[4/3] overflow-hidden md:aspect-[16/11]">
+    <article className="group flex h-full flex-col overflow-hidden rounded-2xl border border-white/12 bg-[rgba(18,18,24,0.8)] shadow-[0_14px_34px_rgba(0,0,0,0.32)] transition hover:border-white/22">
+      <Link href={`/products/${product.slug}`} className="relative block">
+        <div className="relative aspect-[4/3] overflow-hidden">
           <img
             src={product.image}
             alt={product.name}
-            className="h-full w-full object-cover transition duration-500 group-hover:scale-105"
+            className="h-full w-full object-cover transition duration-300 group-hover:scale-[1.03]"
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/72 via-black/15 to-transparent" />
-          {opening ? (
-            <div className="absolute inset-0 flex items-center justify-center bg-black/55 backdrop-blur-[1.5px]">
-              <div className="h-8 w-8 animate-spin rounded-full border-2 border-white/20 border-t-white" />
-            </div>
-          ) : null}
-          <div className="absolute left-3 top-3 hidden flex-wrap gap-1.5 md:left-4 md:top-4 md:flex">
-            <ConditionPill condition={product.condition} />
-            <DealPill dealType={product.dealType} />
-            {hasDiscount ? <DiscountPill percent={discountPercent} /> : null}
-            {showStatus ? <StatusPill status={product.status} /> : null}
-          </div>
+          <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/15 to-transparent" />
         </div>
+        <span
+          className={`absolute left-3 top-3 inline-flex rounded-full border px-2.5 py-1 text-[10px] font-medium tracking-wide ${status.tone}`}
+        >
+          {status.label}
+        </span>
       </Link>
 
-      <div className="flex grow flex-col space-y-2 p-3 md:space-y-4 md:p-5">
-        <div className="space-y-1.5 md:space-y-2">
-          <p className="hidden text-xs uppercase tracking-[0.14em] text-white/58 md:block">{product.category}</p>
+      <div className="flex grow flex-col gap-3 p-3.5 sm:p-4">
+        <div className="space-y-1.5">
+          <p className="text-[11px] uppercase tracking-[0.15em] text-white/45">
+            {product.category}
+          </p>
           <Link
             href={`/products/${product.slug}`}
-            className="line-clamp-2 text-[0.92rem] font-semibold leading-snug text-white hover:text-white/85 md:text-[1.05rem]"
+            className="line-clamp-2 text-[0.92rem] font-semibold leading-snug text-white transition hover:text-white/90 sm:text-[0.98rem]"
           >
             {product.name}
           </Link>
-          <p className="hidden line-clamp-2 text-[0.96rem] leading-relaxed text-white/72 md:block">{product.description}</p>
         </div>
 
-        <div className="flex flex-col items-start gap-1.5 md:flex-row md:items-center md:justify-between md:gap-3">
+        <div className="mt-auto space-y-2">
           <div className="flex items-baseline gap-2">
-            <p className="whitespace-nowrap text-[0.95rem] font-semibold text-white md:text-xl">
+            <p className="text-[0.96rem] font-bold text-white sm:text-[1.06rem]">
               <Currency cents={product.finalPrice} />
             </p>
-            {hasDiscount ? (
-              <p className="hidden text-sm text-white/52 line-through md:block">
+            {product.isOnSale ? (
+              <p className="text-xs text-white/45 line-through">
                 <Currency cents={product.price} />
               </p>
             ) : null}
           </div>
-          {mobilePill ? (
-            <span className="inline-flex rounded-full border border-white/20 bg-white/[0.06] px-1.5 py-0.5 text-[10.5px] text-white/85 md:hidden">
-              {mobilePill}
-            </span>
-          ) : null}
-        </div>
 
-        <div className="hidden min-h-8 md:block">
-          {quickSpecs.length > 0 ? (
-            <div className="flex flex-wrap gap-2">
-              {quickSpecs.map((spec) => (
-                <span
-                  key={`${product.id}-${spec}`}
-                  className="rounded-full border border-white/14 bg-white/[0.035] px-2.5 py-1 text-xs text-white/78"
-                >
-                  {spec}
-                </span>
-              ))}
-            </div>
-          ) : (
-            <span className="text-xs text-white/55">No quick specs</span>
-          )}
-        </div>
-
-        <div className="hidden pt-1 md:block">
-          <AddToCartButton productId={product.id} className="w-full" />
+          <div className="grid grid-cols-2 gap-2">
+            <Link
+              href={`/products/${product.slug}`}
+              className="inline-flex min-h-9 items-center justify-center rounded-lg border border-white/18 bg-white/[0.03] px-2 text-[11px] font-medium text-white/90 transition hover:border-white/30 sm:min-h-10 sm:text-xs"
+            >
+              View
+            </Link>
+            <AddToCartButton
+              productId={product.id}
+              label="Add"
+              pendingLabel="Adding..."
+              icon={<FaCartPlus className="h-3.5 w-3.5" />}
+              className="!min-h-9 !rounded-lg !px-2.5 !py-1.5 !text-[11px] sm:!min-h-10 sm:!px-3 sm:!py-2 sm:!text-xs"
+            />
+          </div>
         </div>
       </div>
     </article>

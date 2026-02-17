@@ -2,10 +2,9 @@ import { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { AddToCartButton } from "@/components/store/AddToCartButton";
 import { Currency } from "@/components/store/Currency";
-import { GlassPanel, PageShell } from "@/components/store/PageShell";
-import { ConditionPill, DealPill, DiscountPill } from "@/components/store/Pills";
-import { glassStyles } from "@/components/ui/glass";
-import { getProductBySlug } from "@/lib/store";
+import { ProductTile } from "@/components/store/ProductTile";
+import { PageShell } from "@/components/store/PageShell";
+import { getProductBySlug, getProducts } from "@/lib/store";
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const { slug } = await params;
@@ -30,118 +29,97 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
   }
 
   const hasDiscount = product.finalPrice < product.price;
-  const discountPercent = hasDiscount
-    ? product.discountType === "PERCENT"
-      ? product.discountValue
-      : Math.round(((product.price - product.finalPrice) / Math.max(1, product.price)) * 100)
-    : 0;
+  const related = (await getProducts({ category: product.categorySlug, sort: "latest" }))
+    .filter((item) => item.id !== product.id)
+    .slice(0, 3);
+
+  const productImages = product.images.length > 0 ? product.images : [product.image];
 
   return (
-    <PageShell>
-      <GlassPanel className="grid gap-6 lg:grid-cols-[1.2fr_1fr]">
+    <PageShell className="space-y-8 pb-14">
+      <section className="grid gap-6 rounded-3xl border border-white/12 bg-[linear-gradient(165deg,rgba(19,18,28,0.94)_0%,rgba(10,10,14,0.94)_75%)] p-4 md:p-6 lg:grid-cols-[1.1fr_0.9fr]">
         <div className="space-y-3">
-          <img src={product.image} alt={product.name} className="h-[360px] w-full rounded-3xl object-cover" />
-          <div className="grid grid-cols-3 gap-3">
-            {product.images.slice(0, 3).map((image, idx) => (
-              <img key={`${image}-${idx}`} src={image} alt={`${product.name} ${idx + 1}`} className="h-24 w-full rounded-xl object-cover" />
+          <img
+            src={productImages[0]}
+            alt={product.name}
+            className="h-[300px] w-full rounded-2xl border border-white/10 object-cover md:h-[420px]"
+          />
+          <div className="grid grid-cols-4 gap-2">
+            {productImages.slice(0, 4).map((image, index) => (
+              <img
+                key={`${image}-${index}`}
+                src={image}
+                alt={`${product.name} ${index + 1}`}
+                className="h-20 w-full rounded-xl border border-white/10 object-cover"
+              />
             ))}
           </div>
         </div>
 
-        <div>
-          <p className="text-sm uppercase tracking-wide text-white/65">{product.category}</p>
-          <h1 className="mt-2 text-3xl font-bold text-white">{product.name}</h1>
-          <div className="mt-2 flex flex-wrap gap-2">
-            <ConditionPill condition={product.condition} />
-            <DealPill dealType={product.dealType} />
-            {hasDiscount ? <DiscountPill percent={discountPercent} /> : null}
+        <div className="space-y-5">
+          <div className="space-y-2">
+            <p className="text-xs uppercase tracking-[0.16em] text-white/55">{product.category}</p>
+            <h1 className="text-2xl font-semibold text-white md:text-3xl">{product.name}</h1>
+            <p className="text-sm leading-6 text-white/72">{product.description}</p>
           </div>
-          <p className="mt-3 text-white/75">{product.description}</p>
 
-          <div className="mt-5 flex items-baseline gap-3">
-            <p className="text-3xl font-bold text-white">
+          <div className="flex flex-wrap items-center gap-2 text-xs">
+            <span className="rounded-full border border-white/20 bg-white/[0.05] px-2.5 py-1 text-white/80">
+              {product.stock > 0 ? "In Stock" : "Out of stock"}
+            </span>
+            {product.condition ? (
+              <span className="rounded-full border border-white/20 bg-white/[0.05] px-2.5 py-1 text-white/80">
+                {product.condition.replace(/_/g, " ")}
+              </span>
+            ) : null}
+            {product.warranty ? (
+              <span className="rounded-full border border-white/20 bg-white/[0.05] px-2.5 py-1 text-white/80">
+                Warranty: {product.warranty}
+              </span>
+            ) : null}
+          </div>
+
+          <div className="space-y-1">
+            <p className="text-3xl font-bold text-white md:text-4xl">
               <Currency cents={product.finalPrice} />
             </p>
             {hasDiscount ? (
-              <p className="text-sm text-white/50 line-through">
+              <p className="text-sm text-white/45 line-through">
                 <Currency cents={product.price} />
               </p>
             ) : null}
           </div>
 
-          <div className="mt-6">
-            <AddToCartButton productId={product.id} />
-          </div>
+          <AddToCartButton productId={product.id} className="w-full md:w-auto md:min-w-[210px]" />
 
-          <div className={`mt-8 space-y-3 p-4 ${glassStyles.cardSoft}`}>
-            <h2 className="text-lg font-semibold text-white">Condition</h2>
-            <p className="text-sm text-white/80">{product.condition.replace(/_/g, " ")}</p>
-            {product.conditionNotes ? <p className="text-sm text-white/70">{product.conditionNotes}</p> : null}
-            {product.warranty ? <p className="text-sm text-white/70">Warranty: {product.warranty}</p> : null}
-            {product.batteryHealth ? <p className="text-sm text-white/70">Battery Health: {product.batteryHealth}</p> : null}
-          </div>
-
-          <div className={`mt-4 space-y-2 p-4 ${glassStyles.cardSoft}`}>
-            <h2 className="text-lg font-semibold text-white">Defects / Notes</h2>
-            {product.defects.length === 0 ? (
-              <p className="text-sm text-white/60">No known defects listed.</p>
-            ) : (
-              <ul className="space-y-2 text-sm text-white/80">
-                {product.defects.map((defect) => (
-                  <li key={`${defect.title}-${defect.description}`} className={`rounded-lg p-2 ${glassStyles.cardSoft}`}>
-                    <p className="font-medium text-white">{defect.title}</p>
-                    <p className="text-white/70">{defect.description}</p>
-                    {defect.severity ? <p className="text-xs text-white/70">Severity: {defect.severity}</p> : null}
-                  </li>
-                ))}
-              </ul>
-            )}
-          </div>
-
-          <div className={`mt-4 space-y-2 p-4 ${glassStyles.cardSoft}`}>
-            <h2 className="text-lg font-semibold text-white">Included Accessories</h2>
-            {product.accessoriesIncluded.length === 0 ? (
-              <p className="text-sm text-white/60">No accessories listed.</p>
-            ) : (
-              <ul className="list-disc space-y-1 pl-5 text-sm text-white/80">
-                {product.accessoriesIncluded.map((item) => (
-                  <li key={item}>{item}</li>
-                ))}
-              </ul>
-            )}
-          </div>
-
-          {product.details.length > 0 ? (
-            <div className={`mt-4 space-y-2 p-4 ${glassStyles.cardSoft}`}>
-              <h2 className="text-lg font-semibold text-white">Details</h2>
-              <dl className="space-y-2 text-sm">
-                {product.details.map((row) => (
-                  <div key={row.key} className="flex justify-between border-b border-white/5 pb-1 text-white/80">
-                    <dt>{row.key}</dt>
-                    <dd>{row.value}</dd>
-                  </div>
-                ))}
-              </dl>
-            </div>
-          ) : null}
-
-          <div className={`mt-8 space-y-2 p-4 ${glassStyles.cardSoft}`}>
-            <h2 className="text-lg font-semibold text-white">Specs</h2>
-            {product.specs.length === 0 ? (
-              <p className="text-sm text-white/60">No specs available.</p>
-            ) : (
-              <dl className="space-y-2 text-sm">
-                {product.specs.map((spec) => (
-                  <div key={spec.key} className="flex justify-between border-b border-white/5 pb-1 text-white/80">
+          {product.specs.length > 0 ? (
+            <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-4">
+              <p className="text-sm font-semibold text-white">Quick Specs</p>
+              <dl className="mt-3 space-y-2 text-sm text-white/75">
+                {product.specs.slice(0, 6).map((spec) => (
+                  <div key={spec.key} className="flex items-center justify-between gap-3 border-b border-white/10 pb-1.5">
                     <dt>{spec.key}</dt>
                     <dd>{spec.value}</dd>
                   </div>
                 ))}
               </dl>
-            )}
-          </div>
+            </div>
+          ) : null}
         </div>
-      </GlassPanel>
+      </section>
+
+      <section className="space-y-4">
+        <h2 className="font-[var(--font-azonix)] text-xl uppercase tracking-[0.08em] text-white sm:text-2xl">Related Products</h2>
+        {related.length === 0 ? (
+          <p className="text-white/60">No related products yet.</p>
+        ) : (
+          <div className="grid max-[380px]:grid-cols-1 grid-cols-2 gap-4 lg:grid-cols-3 lg:gap-6">
+            {related.map((item) => (
+              <ProductTile key={item.id} product={item} />
+            ))}
+          </div>
+        )}
+      </section>
     </PageShell>
   );
 }

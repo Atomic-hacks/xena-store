@@ -2,9 +2,9 @@ import Link from "next/link";
 
 export default function Footer() {
   return (
-    <footer className="mt-20 border-t border-white/8 bg-black/40 backdrop-blur-2xl">
-      <div className="mx-auto flex w-full max-w-7xl flex-col gap-4 px-4 py-8 text-sm text-white/70 md:flex-row md:items-center md:justify-between md:px-8">
-        <p>© {new Date().getFullYear()} Xena Store</p>
+    <footer className="mt-16 border-t border-white/10 bg-black">
+      <div className="mx-auto flex w-full max-w-[90rem] flex-col gap-4 px-4 py-8 text-sm text-white/65 md:flex-row md:items-center md:justify-between md:px-7 lg:px-10">
+        <p>© {new Date().getFullYear()} Xena Store. Premium gadgets and gaming gear.</p>
         <div className="flex flex-wrap gap-4">
           <Link href="/policies/shipping-returns" className="hover:text-white">
             Shipping & Returns

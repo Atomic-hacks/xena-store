@@ -2,14 +2,15 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import SearchBar from "@/components/ui/SearchBar";
+import { Search } from "lucide-react";
 import { logger } from "@/lib/logger";
-import { glassStyles } from "@/components/ui/glass";
 
 type CategoryOption = {
   slug: string;
   name: string;
 };
+
+type ProductCondition = "NEW" | "UK_USED" | "NG_USED";
 
 const conditionOptions: Array<{ value: "" | ProductCondition; label: string }> = [
   { value: "", label: "All conditions" },
@@ -17,8 +18,6 @@ const conditionOptions: Array<{ value: "" | ProductCondition; label: string }> =
   { value: "UK_USED", label: "UK Used" },
   { value: "NG_USED", label: "NG Used" },
 ];
-
-type ProductCondition = "NEW" | "UK_USED" | "NG_USED";
 
 export function ProductsToolbar({ categories }: { categories: CategoryOption[] }) {
   const router = useRouter();
@@ -55,17 +54,14 @@ export function ProductsToolbar({ categories }: { categories: CategoryOption[] }
       }
 
       const nextParams = params.toString();
-      const next = `${pathname}?${nextParams}`;
       logger.info("client.products.search.push", { hasQuery: Boolean(trimmed) });
-      router.replace(next, { scroll: false });
+      router.replace(`${pathname}?${nextParams}`, { scroll: false });
     }, 300);
 
     return () => window.clearTimeout(timeout);
   }, [currentQueryString, pathname, router, search]);
 
-  function buildNextParams(
-    update: (params: URLSearchParams) => void
-  ): string {
+  function buildNextParams(update: (params: URLSearchParams) => void): string {
     const params = new URLSearchParams(searchParams.toString());
     update(params);
     return params.toString();
@@ -73,13 +69,18 @@ export function ProductsToolbar({ categories }: { categories: CategoryOption[] }
 
   return (
     <div className="space-y-4">
-      <SearchBar value={search} onChange={setSearch} placeholder="Search by name, brand, tag, or condition..." />
-      <div className="flex flex-col gap-3 md:flex-row md:items-center">
-        <label className="text-sm text-white/70" htmlFor="category-filter">
-          Category
-        </label>
+      <div className="relative">
+        <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-white/45" />
+        <input
+          value={search}
+          onChange={(event) => setSearch(event.target.value)}
+          placeholder="Search by product, brand, or keyword"
+          className="h-11 w-full rounded-xl border border-white/14 bg-[#111118] pl-10 pr-3 text-sm text-white placeholder:text-white/45 focus:border-white/30 focus:outline-none"
+        />
+      </div>
+
+      <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
         <select
-          id="category-filter"
           value={category}
           onChange={(event) => {
             const nextParams = buildNextParams((params) => {
@@ -89,12 +90,11 @@ export function ProductsToolbar({ categories }: { categories: CategoryOption[] }
               }
               params.delete("category");
             });
-            logger.info("client.products.filter.category", {
-              category: event.target.value || "all",
-            });
+            logger.info("client.products.filter.category", { category: event.target.value || "all" });
             router.replace(`${pathname}?${nextParams}`, { scroll: false });
           }}
-          className={`${glassStyles.input} px-3 py-2 text-sm`}
+          className="h-11 rounded-xl border border-white/14 bg-[#111118] px-3 text-sm text-white focus:border-white/30 focus:outline-none"
+          aria-label="Filter by category"
         >
           <option value="">All categories</option>
           {categories.map((item) => (
@@ -104,11 +104,7 @@ export function ProductsToolbar({ categories }: { categories: CategoryOption[] }
           ))}
         </select>
 
-        <label className="text-sm text-white/70" htmlFor="condition-filter">
-          Condition
-        </label>
         <select
-          id="condition-filter"
           value={condition}
           onChange={(event) => {
             const nextParams = buildNextParams((params) => {
@@ -118,12 +114,11 @@ export function ProductsToolbar({ categories }: { categories: CategoryOption[] }
               }
               params.delete("condition");
             });
-            logger.info("client.products.filter.condition", {
-              condition: event.target.value || "all",
-            });
+            logger.info("client.products.filter.condition", { condition: event.target.value || "all" });
             router.replace(`${pathname}?${nextParams}`, { scroll: false });
           }}
-          className={`${glassStyles.input} px-3 py-2 text-sm`}
+          className="h-11 rounded-xl border border-white/14 bg-[#111118] px-3 text-sm text-white focus:border-white/30 focus:outline-none"
+          aria-label="Filter by condition"
         >
           {conditionOptions.map((item) => (
             <option key={item.label} value={item.value}>
@@ -132,11 +127,7 @@ export function ProductsToolbar({ categories }: { categories: CategoryOption[] }
           ))}
         </select>
 
-        <label className="text-sm text-white/70" htmlFor="sort-filter">
-          Sort
-        </label>
         <select
-          id="sort-filter"
           value={sort}
           onChange={(event) => {
             const nextParams = buildNextParams((params) => {
@@ -145,7 +136,8 @@ export function ProductsToolbar({ categories }: { categories: CategoryOption[] }
             logger.info("client.products.filter.sort", { sort: event.target.value });
             router.replace(`${pathname}?${nextParams}`, { scroll: false });
           }}
-          className={`${glassStyles.input} px-3 py-2 text-sm`}
+          className="h-11 rounded-xl border border-white/14 bg-[#111118] px-3 text-sm text-white focus:border-white/30 focus:outline-none"
+          aria-label="Sort products"
         >
           <option value="latest">Latest</option>
           <option value="price_asc">Price: Low to High</option>
