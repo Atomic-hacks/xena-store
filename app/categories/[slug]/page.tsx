@@ -33,7 +33,7 @@ export default async function CategoryDetailPage({ params }: { params: Promise<{
         {products.length === 0 ? (
           <p className="mt-4 text-white/70">No products in this category yet.</p>
         ) : (
-          <div className="mt-6 grid max-[359px]:grid-cols-1 grid-cols-2 gap-6 lg:grid-cols-3 lg:gap-7">
+          <div className="mt-6 grid grid-cols-1 gap-6 min-[430px]:grid-cols-2 lg:grid-cols-3 lg:gap-7">
             {products.map((product) => (
               <ProductTile key={product.id} product={product} />
             ))}

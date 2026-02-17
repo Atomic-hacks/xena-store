@@ -74,9 +74,9 @@ export function ProductTile({
           <p className="hidden line-clamp-2 text-[0.96rem] leading-relaxed text-white/72 md:block">{product.description}</p>
         </div>
 
-        <div className="flex items-center justify-between gap-3">
+        <div className="flex flex-col items-start gap-1.5 md:flex-row md:items-center md:justify-between md:gap-3">
           <div className="flex items-baseline gap-2">
-            <p className="whitespace-nowrap text-base font-semibold text-white md:text-xl">
+            <p className="whitespace-nowrap text-[0.95rem] font-semibold text-white md:text-xl">
               <Currency cents={product.finalPrice} />
             </p>
             {hasDiscount ? (
@@ -86,7 +86,7 @@ export function ProductTile({
             ) : null}
           </div>
           {mobilePill ? (
-            <span className="inline-flex rounded-full border border-white/20 bg-white/[0.06] px-2 py-0.5 text-[11px] text-white/85 md:hidden">
+            <span className="inline-flex rounded-full border border-white/20 bg-white/[0.06] px-1.5 py-0.5 text-[10.5px] text-white/85 md:hidden">
               {mobilePill}
             </span>
           ) : null}

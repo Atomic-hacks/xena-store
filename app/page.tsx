@@ -50,7 +50,7 @@ export default async function HomePage() {
         {featured.length === 0 ? (
           <p className="text-white/70">No featured products yet.</p>
         ) : (
-          <div className="grid max-[359px]:grid-cols-1 grid-cols-2 gap-6 lg:grid-cols-3">
+          <div className="grid grid-cols-1 gap-6 min-[430px]:grid-cols-2 lg:grid-cols-3">
             {featured.map((product) => (
               <ProductTile key={product.id} product={product} />
             ))}
@@ -68,7 +68,7 @@ export default async function HomePage() {
         {hotSales.length === 0 ? (
           <p className="text-white/70">No hot sales right now.</p>
         ) : (
-          <div className="grid max-[359px]:grid-cols-1 grid-cols-2 gap-6 lg:grid-cols-3">
+          <div className="grid grid-cols-1 gap-6 min-[430px]:grid-cols-2 lg:grid-cols-3">
             {hotSales.map((product) => (
               <ProductTile key={product.id} product={product} />
             ))}
@@ -86,7 +86,7 @@ export default async function HomePage() {
         {cheapDeals.length === 0 ? (
           <p className="text-white/70">No cheap deals available yet.</p>
         ) : (
-          <div className="grid max-[359px]:grid-cols-1 grid-cols-2 gap-6 lg:grid-cols-3">
+          <div className="grid grid-cols-1 gap-6 min-[430px]:grid-cols-2 lg:grid-cols-3">
             {cheapDeals.map((product) => (
               <ProductTile key={product.id} product={product} />
             ))}

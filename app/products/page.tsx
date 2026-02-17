@@ -55,7 +55,7 @@ export default async function ProductsPage({
         {products.length === 0 ? (
           <p className="text-white/70">No products match this filter.</p>
         ) : (
-          <div className="grid max-[359px]:grid-cols-1 grid-cols-2 gap-6 lg:grid-cols-3 lg:gap-7">
+          <div className="grid grid-cols-1 gap-6 min-[430px]:grid-cols-2 lg:grid-cols-3 lg:gap-7">
             {products.map((product) => (
               <ProductTile key={product.id} product={product} />
             ))}
