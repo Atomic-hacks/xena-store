@@ -11,8 +11,8 @@ export default function CartPage() {
   return (
     <PageShell className="space-y-4">
       <GlassPanel>
-        <h1 className="text-3xl font-bold text-white">Cart</h1>
-        <p className="mt-1 text-white/70">Edit quantities and continue to checkout.</p>
+        <h1 className="text-3xl font-bold text-neutral-900">Cart</h1>
+        <p className="mt-1 text-neutral-600">Edit quantities and continue to checkout.</p>
       </GlassPanel>
       <CartView />
     </PageShell>

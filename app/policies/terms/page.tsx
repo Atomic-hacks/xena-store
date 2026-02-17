@@ -10,8 +10,8 @@ export default function TermsPage() {
   return (
     <PageShell>
       <GlassPanel>
-        <h1 className="text-3xl font-bold text-white">Terms</h1>
-        <p className="mt-3 text-white/75">By placing an order, you agree to product availability and pricing confirmation at checkout.</p>
+        <h1 className="text-3xl font-bold text-neutral-900">Terms</h1>
+        <p className="mt-3 text-neutral-600">By placing an order, you agree to product availability and pricing confirmation at checkout.</p>
       </GlassPanel>
     </PageShell>
   );

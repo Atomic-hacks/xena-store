@@ -31,10 +31,6 @@ export function ProductsToolbar({ categories }: { categories: CategoryOption[] }
   const sort = searchParams.get("sort") ?? "latest";
   const condition = (searchParams.get("condition") as ProductCondition | null) ?? "";
 
-  useEffect(() => {
-    setSearch((current) => (current === queryFromUrl ? current : queryFromUrl));
-  }, [queryFromUrl]);
-
   const currentQueryString = useMemo(() => searchParams.toString(), [searchParams]);
 
   useEffect(() => {
@@ -70,12 +66,12 @@ export function ProductsToolbar({ categories }: { categories: CategoryOption[] }
   return (
     <div className="space-y-4">
       <div className="relative">
-        <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-white/45" />
+        <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-neutral-400" />
         <input
           value={search}
           onChange={(event) => setSearch(event.target.value)}
           placeholder="Search by product, brand, or keyword"
-          className="h-11 w-full rounded-xl border border-white/14 bg-[#111118] pl-10 pr-3 text-sm text-white placeholder:text-white/45 focus:border-white/30 focus:outline-none"
+          className="h-11 w-full rounded-full bg-white pl-10 pr-4 text-sm text-neutral-900 placeholder:text-neutral-400 shadow-[0_10px_24px_rgba(15,23,42,0.08)] focus:outline-none"
         />
       </div>
 
@@ -93,7 +89,7 @@ export function ProductsToolbar({ categories }: { categories: CategoryOption[] }
             logger.info("client.products.filter.category", { category: event.target.value || "all" });
             router.replace(`${pathname}?${nextParams}`, { scroll: false });
           }}
-          className="h-11 rounded-xl border border-white/14 bg-[#111118] px-3 text-sm text-white focus:border-white/30 focus:outline-none"
+          className="h-11 rounded-full bg-white px-4 text-sm text-neutral-700 shadow-[0_10px_24px_rgba(15,23,42,0.06)] focus:outline-none"
           aria-label="Filter by category"
         >
           <option value="">All categories</option>
@@ -117,7 +113,7 @@ export function ProductsToolbar({ categories }: { categories: CategoryOption[] }
             logger.info("client.products.filter.condition", { condition: event.target.value || "all" });
             router.replace(`${pathname}?${nextParams}`, { scroll: false });
           }}
-          className="h-11 rounded-xl border border-white/14 bg-[#111118] px-3 text-sm text-white focus:border-white/30 focus:outline-none"
+          className="h-11 rounded-full bg-white px-4 text-sm text-neutral-700 shadow-[0_10px_24px_rgba(15,23,42,0.06)] focus:outline-none"
           aria-label="Filter by condition"
         >
           {conditionOptions.map((item) => (
@@ -136,7 +132,7 @@ export function ProductsToolbar({ categories }: { categories: CategoryOption[] }
             logger.info("client.products.filter.sort", { sort: event.target.value });
             router.replace(`${pathname}?${nextParams}`, { scroll: false });
           }}
-          className="h-11 rounded-xl border border-white/14 bg-[#111118] px-3 text-sm text-white focus:border-white/30 focus:outline-none"
+          className="h-11 rounded-full bg-white px-4 text-sm text-neutral-700 shadow-[0_10px_24px_rgba(15,23,42,0.06)] focus:outline-none"
           aria-label="Sort products"
         >
           <option value="latest">Latest</option>

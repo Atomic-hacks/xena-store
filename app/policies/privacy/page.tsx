@@ -10,8 +10,8 @@ export default function PrivacyPage() {
   return (
     <PageShell>
       <GlassPanel>
-        <h1 className="text-3xl font-bold text-white">Privacy</h1>
-        <p className="mt-3 text-white/75">Customer data is used only to process and fulfill confirmed orders.</p>
+        <h1 className="text-3xl font-bold text-neutral-900">Privacy</h1>
+        <p className="mt-3 text-neutral-600">Customer data is used only to process and fulfill confirmed orders.</p>
       </GlassPanel>
     </PageShell>
   );

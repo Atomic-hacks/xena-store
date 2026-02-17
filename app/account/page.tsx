@@ -17,13 +17,13 @@ export default async function AccountPage() {
     return (
       <PageShell className="space-y-4">
         <GlassPanel>
-          <h1 className="text-3xl font-bold text-white">Account</h1>
-          <p className="mt-2 text-white/70">
+          <h1 className="text-3xl font-bold text-neutral-900">Account</h1>
+          <p className="mt-2 text-neutral-600">
             You are not signed in with a checkout profile yet.
           </p>
           <Link
             href="/checkout"
-            className="mt-4 inline-block rounded-xl border border-white/25 bg-white px-4 py-2 text-sm text-black transition hover:bg-white/85"
+            className="mt-4 inline-block rounded-full bg-black px-5 py-2 text-sm text-white transition hover:bg-neutral-800"
           >
             Go to checkout profile setup
           </Link>
@@ -59,8 +59,8 @@ export default async function AccountPage() {
     return (
       <PageShell className="space-y-4">
         <GlassPanel>
-          <h1 className="text-3xl font-bold text-white">Account</h1>
-          <p className="mt-2 text-white/70">Profile no longer exists. Please create a new one at checkout.</p>
+          <h1 className="text-3xl font-bold text-neutral-900">Account</h1>
+          <p className="mt-2 text-neutral-600">Profile no longer exists. Please create a new one at checkout.</p>
         </GlassPanel>
       </PageShell>
     );
@@ -69,8 +69,8 @@ export default async function AccountPage() {
   return (
     <PageShell className="space-y-4">
       <GlassPanel>
-        <h1 className="text-3xl font-bold text-white">Your Account</h1>
-        <p className="mt-1 text-white/70">Profile, order history, and totals.</p>
+        <h1 className="text-3xl font-bold text-neutral-900">Your Account</h1>
+        <p className="mt-1 text-neutral-600">Profile, order history, and totals.</p>
       </GlassPanel>
       <CustomerAccountPanel
         customer={{

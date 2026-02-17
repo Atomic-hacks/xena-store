@@ -9,10 +9,10 @@
 }
 
 :root {
-  --background: #0b0b0d;
-  --foreground: #f3f3f4;
-  --muted: #a3a3aa;
-  --panel: rgba(255, 255, 255, 0.035);
+  --background: #f4f4f5;
+  --foreground: #1f2329;
+  --muted: #6b7280;
+  --panel: #ffffff;
   --space-1: 8px;
   --space-2: 12px;
   --space-3: 16px;
@@ -21,7 +21,7 @@
 }
 
 html {
-  background-color: #050507;
+  background-color: var(--background);
   overscroll-behavior-y: none;
 }
 
@@ -30,11 +30,11 @@ body {
   font-size: 16px;
   line-height: 1.6;
   min-height: 100%;
-  background-color: #050507;
+  background-color: var(--background);
   background:
-    radial-gradient(circle at 18% 12%, rgba(125, 90, 210, 0.18), transparent 35%),
-    radial-gradient(circle at 78% 8%, rgba(255, 255, 255, 0.06), transparent 42%),
-    linear-gradient(180deg, #0b0b0d 0%, #070709 55%, #050507 100%);
+    radial-gradient(circle at 0% 8%, rgba(239, 68, 68, 0.08), transparent 28%),
+    radial-gradient(circle at 100% 0%, rgba(0, 0, 0, 0.03), transparent 35%),
+    linear-gradient(180deg, #f8f8f9 0%, #f2f2f4 100%);
   color: var(--foreground);
 }
 
@@ -60,6 +60,6 @@ textarea {
 }
 
 .xena-grain {
-  background-image: radial-gradient(rgba(255, 255, 255, 0.22) 0.45px, transparent 0.45px);
+  background-image: radial-gradient(rgba(0, 0, 0, 0.07) 0.45px, transparent 0.45px);
   background-size: 3px 3px;
 }

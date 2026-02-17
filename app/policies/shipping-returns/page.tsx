@@ -10,8 +10,8 @@ export default function ShippingReturnsPage() {
   return (
     <PageShell>
       <GlassPanel>
-        <h1 className="text-3xl font-bold text-white">Shipping & Returns</h1>
-        <p className="mt-3 text-white/75">Orders are confirmed via WhatsApp and fulfilled after manual verification.</p>
+        <h1 className="text-3xl font-bold text-neutral-900">Shipping & Returns</h1>
+        <p className="mt-3 text-neutral-600">Orders are confirmed via WhatsApp and fulfilled after manual verification.</p>
       </GlassPanel>
     </PageShell>
   );

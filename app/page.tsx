@@ -6,7 +6,6 @@ import { ProductTile } from "@/components/store/ProductTile";
 import {
   getCategoriesWithCounts,
   getCheapDealProducts,
-  getFeaturedProducts,
   getHotSaleProducts,
   getProducts,
 } from "@/lib/store";
@@ -46,8 +45,7 @@ function resolveStorefrontCategories(rows: CategoryRow[]) {
 }
 
 export default async function HomePage() {
-  const [featured, hotSales, cheapDeals, categories, allProducts] = await Promise.all([
-    getFeaturedProducts(10),
+  const [hotSales, cheapDeals, categories, allProducts] = await Promise.all([
     getHotSaleProducts(8),
     getCheapDealProducts(8),
     getCategoriesWithCounts(),
@@ -64,60 +62,66 @@ export default async function HomePage() {
     .slice(0, 6);
 
   return (
-    <PageShell className="space-y-11 pb-14">
+    <PageShell className="space-y-12 pb-14">
       <HeroTypeahead products={allProducts} />
 
+      <section className="rounded-[2rem] bg-[#ff3b3b] px-6 py-8 text-white shadow-[0_20px_50px_rgba(248,113,113,0.35)] md:px-10 md:py-10">
+        <div className="grid gap-6 lg:grid-cols-[1.1fr_0.9fr] lg:items-center">
+          <div className="space-y-3">
+            <p className="text-sm font-semibold tracking-[0.15em]">20% OFF</p>
+            <h2 className="font-[var(--font-azonix)] text-3xl uppercase leading-[1.05] sm:text-4xl md:text-5xl">
+              Fine Sound
+            </h2>
+            <p className="max-w-xl text-sm text-white/90 sm:text-base">
+              Seasonal discount across premium audio and gaming accessories. Limited time picks, verified quality.
+            </p>
+            <Link
+              href="/products?query=deal"
+              className="inline-flex min-h-11 items-center justify-center rounded-full bg-white px-6 text-sm font-semibold text-black"
+            >
+              Shop Sale
+            </Link>
+          </div>
+          <div className="flex justify-center lg:justify-end ">
+            <img src="/Headset3.jpg" alt="Summer sale" className="h-56 w-full max-w-[420px] object-contain md:h-72 rounded-4xl" />
+          </div>
+        </div>
+      </section>
+
+      <section className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+        {[
+          { title: "Enjoy Earphone", image: "/Headset4.jpg", color: "bg-[#4b4b4f]" },
+          { title: "New Wears Watch", image: "/iphone2.jpg", color: "bg-[#fb923c]" },
+          { title: "Trend Laptop", image: "/macbookm3.jpg", color: "bg-[#ff3b3b]" },
+        ].map((promo) => (
+          <article
+            key={promo.title}
+            className={`${promo.color} relative min-h-[220px] overflow-hidden rounded-[1.6rem] p-6 text-white`}
+          >
+            <p className="text-sm">Trends</p>
+            <p className="mt-1 max-w-[12ch] text-3xl font-semibold leading-[1.02]">{promo.title}</p>
+            <Link href="/products" className="mt-6 inline-flex rounded-full bg-white px-5 py-2 text-xs text-black">
+              Browse
+            </Link>
+            <img src={promo.image} alt={promo.title} className="absolute bottom-0 right-0 h-40 w-40 object-cover rounded-l-[1.6rem]" />
+          </article>
+        ))}
+      </section>
+
       <section className="space-y-4">
-        <div className="flex items-center justify-between">
-          <h2 className="font-[var(--font-azonix)] text-xl uppercase tracking-[0.08em] text-white sm:text-2xl">Featured</h2>
-          <Link href="/products" className="text-sm text-white/70 hover:text-white">
+        <div className="flex items-end justify-between">
+          <div>
+            <h2 className="font-[var(--font-azonix)] text-3xl uppercase text-neutral-900 sm:text-4xl">Best Seller Products</h2>
+            <p className="mt-2 text-sm text-neutral-500">We have products that you will love</p>
+          </div>
+          <Link href="/products" className="rounded-full bg-black px-5 py-2 text-sm text-white">
             View all
           </Link>
         </div>
-
-        {featured.length === 0 ? (
-          <p className="text-white/60">No featured products yet.</p>
-        ) : (
-          <>
-            <div className="-mx-4 flex snap-x gap-4 overflow-x-auto px-4 pb-2 md:hidden">
-              {featured.map((product) => (
-                <div key={product.id} className="w-[78vw] max-w-[320px] shrink-0 snap-start">
-                  <ProductTile product={product} />
-                </div>
-              ))}
-            </div>
-
-            <div className="hidden grid-cols-2 gap-6 lg:grid lg:grid-cols-3">
-              {featured.slice(0, 6).map((product) => (
-                <ProductTile key={product.id} product={product} />
-              ))}
-            </div>
-          </>
-        )}
-      </section>
-
-      <section className="space-y-4">
-        <h2 className="font-[var(--font-azonix)] text-xl uppercase tracking-[0.08em] text-white sm:text-2xl">Shop by Category</h2>
-        <div className="grid grid-cols-2 gap-3 md:grid-cols-3">
-          {categoryTiles.map((category) => (
-            <Link
-              key={category.label}
-              href={category.href}
-              className="rounded-2xl border border-white/12 bg-[linear-gradient(145deg,rgba(48,40,74,0.26)_0%,rgba(10,10,14,0.72)_75%)] p-4 transition hover:border-white/25"
-            >
-              <p className="text-sm font-semibold text-white">{category.label}</p>
-              <p className="mt-1 text-xs text-white/60">{category.count} products</p>
-            </Link>
-          ))}
-        </div>
-      </section>
-
-      <section className="space-y-4">
-        <h2 className="font-[var(--font-azonix)] text-xl uppercase tracking-[0.08em] text-white sm:text-2xl">Best Sellers</h2>
         {bestSellers.length === 0 ? (
-          <p className="text-white/60">No best sellers yet.</p>
+          <p className="text-neutral-500">No best sellers yet.</p>
         ) : (
-          <div className="grid max-[380px]:grid-cols-1 grid-cols-2 gap-4 lg:grid-cols-3 lg:gap-6">
+          <div className="grid grid-cols-2 gap-4 lg:grid-cols-3 lg:gap-6">
             {bestSellers.map((product) => (
               <ProductTile key={product.id} product={product} />
             ))}
@@ -126,11 +130,11 @@ export default async function HomePage() {
       </section>
 
       <section className="space-y-4">
-        <h2 className="font-[var(--font-azonix)] text-xl uppercase tracking-[0.08em] text-white sm:text-2xl">New Arrivals</h2>
+        <h2 className="font-[var(--font-azonix)] text-2xl uppercase text-neutral-900 sm:text-3xl">New Arrivals</h2>
         {newArrivals.length === 0 ? (
-          <p className="text-white/60">No arrivals available.</p>
+          <p className="text-neutral-500">No arrivals available.</p>
         ) : (
-          <div className="grid max-[380px]:grid-cols-1 grid-cols-2 gap-4 lg:grid-cols-3 lg:gap-6">
+          <div className="grid grid-cols-2 gap-4 lg:grid-cols-3 lg:gap-6">
             {newArrivals.map((product) => (
               <ProductTile key={product.id} product={product} />
             ))}
@@ -139,46 +143,36 @@ export default async function HomePage() {
       </section>
 
       <section className="space-y-4">
-        <div className="rounded-3xl border border-violet-300/20 bg-[linear-gradient(145deg,rgba(42,32,64,0.85)_0%,rgba(13,13,18,0.92)_70%)] p-6">
-          <p className="text-xs uppercase tracking-[0.16em] text-violet-200/85">Deals</p>
-          <h2 className="mt-2 font-[var(--font-azonix)] text-2xl uppercase tracking-[0.06em] text-white">
-            Premium Deals This Week
-          </h2>
-          <p className="mt-2 max-w-2xl text-sm text-white/70">
-            Handpicked markdowns on flagship phones, gaming accessories, and performance devices.
-          </p>
-          <Link
-            href="/products?query=deal"
-            className="mt-4 inline-flex min-h-10 items-center justify-center rounded-xl border border-white/25 bg-white/[0.06] px-4 text-sm text-white transition hover:border-white/45"
-          >
+        <div className="flex items-end justify-between">
+          <h2 className="font-[var(--font-azonix)] text-2xl uppercase text-neutral-900 sm:text-3xl">Deals & Promotions</h2>
+          <Link href="/products?query=deal" className="text-sm text-neutral-600 hover:text-neutral-900">
             Explore all deals
           </Link>
         </div>
 
         {deals.length > 0 ? (
-          <div className="grid max-[380px]:grid-cols-1 grid-cols-2 gap-4 lg:grid-cols-3 lg:gap-6">
+          <div className="grid grid-cols-2 gap-4 lg:grid-cols-3 lg:gap-6">
             {deals.map((product) => (
               <ProductTile key={product.id} product={product} />
             ))}
           </div>
         ) : (
-          <p className="text-white/60">No deals available right now.</p>
+          <p className="text-neutral-500">No deals available right now.</p>
         )}
       </section>
 
       <section className="space-y-4">
-        <h2 className="font-[var(--font-azonix)] text-xl uppercase tracking-[0.08em] text-white sm:text-2xl">Why Shop With Us?</h2>
-        <div className="grid gap-3 md:grid-cols-2 lg:grid-cols-4">
-          {[
-            ["Fast Delivery", "Reliable dispatch and tracked shipping nationwide."],
-            ["Warranty Support", "Coverage on selected products and verified condition notes."],
-            ["Secure Payment", "Protected checkout process with order confirmation flow."],
-            ["Real Support", "Quick assistance for product choice and after-sales help."],
-          ].map(([title, text]) => (
-            <article key={title} className="rounded-2xl border border-white/10 bg-white/[0.03] p-4">
-              <p className="text-sm font-semibold text-white">{title}</p>
-              <p className="mt-2 text-xs leading-5 text-white/65">{text}</p>
-            </article>
+        <h2 className="font-[var(--font-azonix)] text-2xl uppercase text-neutral-900 sm:text-3xl">Shop by Category</h2>
+        <div className="grid grid-cols-2 gap-3 md:grid-cols-3">
+          {categoryTiles.map((category) => (
+            <Link
+              key={category.label}
+              href={category.href}
+              className="rounded-3xl bg-white p-5 shadow-[0_14px_32px_rgba(15,23,42,0.08)] transition hover:shadow-[0_18px_38px_rgba(15,23,42,0.12)]"
+            >
+              <p className="text-sm font-semibold text-neutral-900">{category.label}</p>
+              <p className="mt-1 text-xs text-neutral-500">{category.count} products</p>
+            </Link>
           ))}
         </div>
       </section>

@@ -65,17 +65,15 @@ const ProductCard: React.FC<ProductCardProps> = ({
   const [, setImageLoaded] = useState(false);
   const [showActions, setShowActions] = useState(false);
 
-  const [isMobile, setIsMobile] = useState(false);
+  const [isMobile, setIsMobile] = useState(() =>
+    typeof window !== "undefined" ? window.innerWidth < 640 : false
+  );
 
   useEffect(() => {
     const handleResize = () => {
       setIsMobile(window.innerWidth < 640);
     };
 
-    // Initial check
-    handleResize();
-
-    // Optional: listen for window resize
     window.addEventListener("resize", handleResize);
 
     return () => window.removeEventListener("resize", handleResize);

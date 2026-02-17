@@ -8,7 +8,12 @@ export function PageShell({
   className?: string;
 }) {
   return (
-    <main className={cn("mx-auto w-full max-w-[90rem] px-4 py-8 md:px-7 lg:px-10 md:py-10", className)}>
+    <main
+      className={cn(
+        "mx-auto w-full max-w-[98rem] px-4 py-8 sm:px-6 md:px-8 md:py-10 lg:px-10 xl:px-12",
+        className
+      )}
+    >
       {children}
     </main>
   );
@@ -24,7 +29,7 @@ export function GlassPanel({
   return (
     <section
       className={cn(
-        "rounded-3xl border border-white/8 bg-black/45 p-4 md:p-5 lg:p-6 shadow-[0_10px_24px_rgba(0,0,0,0.2)]",
+        "rounded-3xl bg-white p-4 shadow-[0_14px_38px_rgba(15,23,42,0.08)] md:p-5 lg:p-6",
         className
       )}
     >

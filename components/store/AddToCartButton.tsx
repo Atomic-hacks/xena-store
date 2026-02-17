@@ -30,7 +30,7 @@ export function AddToCartButton({
       }}
       disabled={pending}
       className={cn(
-        "inline-flex min-h-11 items-center justify-center rounded-xl border border-white/25 bg-white/10 px-2 py-2.5 text-sm font-medium text-white transition hover:bg-white hover:text-black disabled:opacity-60",
+        "inline-flex min-h-11 items-center justify-center rounded-full bg-black px-4 py-2.5 text-sm font-medium text-white transition hover:bg-neutral-800 disabled:opacity-60",
         className
       )}
       aria-label="Add to cart"
@@ -40,7 +40,7 @@ export function AddToCartButton({
       ) : (
         <span className="inline-flex items-center gap-1.5">
           {icon}
-         <p className="hidden md:block"> {label}</p>
+          <span className="hidden md:block">{label}</span>
         </span>
       )}
     </button>

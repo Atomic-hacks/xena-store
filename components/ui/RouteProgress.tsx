@@ -42,13 +42,14 @@ export function RouteProgress() {
   }, []);
 
   useEffect(() => {
-    setLoading(false);
+    const raf = window.requestAnimationFrame(() => setLoading(false));
+    return () => window.cancelAnimationFrame(raf);
   }, [pathname, searchParams]);
 
   return (
     <div className="pointer-events-none fixed inset-x-0 top-0 z-[100] h-[2px] overflow-hidden">
       <div
-        className={`h-full bg-gradient-to-r from-violet-400/60 via-white/90 to-violet-400/60 transition-all duration-300 ${
+        className={`h-full bg-gradient-to-r from-neutral-300 via-black to-neutral-300 transition-all duration-300 ${
           loading ? "w-full opacity-100" : "w-0 opacity-0"
         }`}
       />
