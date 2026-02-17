@@ -33,13 +33,15 @@ export function ProductTile({
     : null;
 
   return (
-    <article className={`group relative flex h-full flex-col overflow-hidden ${glassStyles.card} ${glassStyles.interactive}`}>
+    <article
+      className={`group relative flex h-full flex-col overflow-hidden max-md:rounded-[18px] ${glassStyles.card} ${glassStyles.interactive}`}
+    >
       <Link
         href={`/products/${product.slug}`}
         className="block"
         onClick={() => setOpening(true)}
       >
-        <div className="relative aspect-[16/11] overflow-hidden">
+        <div className="relative aspect-[4/3] overflow-hidden md:aspect-[16/11]">
           <img
             src={product.image}
             alt={product.name}
@@ -60,12 +62,12 @@ export function ProductTile({
         </div>
       </Link>
 
-      <div className="flex grow flex-col space-y-2 p-3.5 md:space-y-4 md:p-5">
+      <div className="flex grow flex-col space-y-2 p-3 md:space-y-4 md:p-5">
         <div className="space-y-1.5 md:space-y-2">
           <p className="hidden text-xs uppercase tracking-[0.14em] text-white/58 md:block">{product.category}</p>
           <Link
             href={`/products/${product.slug}`}
-            className="line-clamp-2 text-[0.97rem] font-semibold leading-snug text-white hover:text-white/85 md:text-[1.05rem]"
+            className="line-clamp-2 text-[0.92rem] font-semibold leading-snug text-white hover:text-white/85 md:text-[1.05rem]"
           >
             {product.name}
           </Link>
