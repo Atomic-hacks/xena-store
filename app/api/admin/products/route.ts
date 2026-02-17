@@ -1,4 +1,4 @@
-import { DiscountType, ProductCondition, ProductStatus } from "@prisma/client";
+import { DiscountType, Prisma, ProductCondition, ProductStatus } from "@prisma/client";
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { logger } from "@/lib/logger";
@@ -29,6 +29,25 @@ type ProductBody = {
   specs?: Array<{ key: string; value: string }>;
   details?: Array<{ key: string; value: string }>;
 };
+
+function mapPrismaError(error: Prisma.PrismaClientKnownRequestError): {
+  status: number;
+  message: string;
+} {
+  if (error.code === "P2002") {
+    return { status: 409, message: "A product with this slug already exists" };
+  }
+
+  if (error.code === "P2003") {
+    return { status: 400, message: "Invalid related record (category or relation)" };
+  }
+
+  if (error.code === "P2025") {
+    return { status: 404, message: "Related record was not found" };
+  }
+
+  return { status: 500, message: "Database request failed" };
+}
 
 export async function GET(): Promise<NextResponse> {
   try {
@@ -86,8 +105,18 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
     return NextResponse.json(created, { status: 201 });
   } catch (error) {
     logger.error("api.admin.products.post.error");
+    if (error instanceof Prisma.PrismaClientKnownRequestError) {
+      const mapped = mapPrismaError(error);
+      logger.error("api.admin.products.post.error.prisma", {
+        code: error.code,
+        status: mapped.status,
+      });
+      return NextResponse.json({ error: mapped.message }, { status: mapped.status });
+    }
     if (error instanceof Error) {
-      logger.error("api.admin.products.post.error.stack", { name: error.name });
+      logger.error("api.admin.products.post.error.stack", {
+        name: error.name,
+      });
     }
     return NextResponse.json({ error: "Failed to create product" }, { status: 500 });
   }
