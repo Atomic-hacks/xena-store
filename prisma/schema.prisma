@@ -1,0 +1,136 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum ProductStatus {
+  PUBLISHED
+  DRAFT
+  ARCHIVED
+}
+
+enum DiscountType {
+  NONE
+  PERCENT
+  FIXED
+}
+
+enum ProductCondition {
+  NEW
+  UK_USED
+  NG_USED
+}
+
+enum DealType {
+  NONE
+  CHEAP_DEAL
+  HOT_SALE
+  CLEARANCE
+}
+
+model Category {
+  id        String    @id @default(cuid())
+  name      String
+  slug      String    @unique
+  createdAt DateTime  @default(now())
+  products  Product[]
+}
+
+model Product {
+  id                  String           @id @default(cuid())
+  name                String
+  slug                String           @unique
+  brand               String?
+  description         String
+  images              Json
+  price               Int
+  discountType        DiscountType     @default(NONE)
+  discountValue       Int              @default(0)
+  stock               Int              @default(0)
+  featured            Boolean          @default(false)
+  status              ProductStatus    @default(PUBLISHED)
+  condition           ProductCondition @default(NEW)
+  conditionNotes      String?
+  defects             Json?
+  dealType            DealType         @default(NONE)
+  warranty            String?
+  accessoriesIncluded Json?
+  batteryHealth       String?
+  categoryId          String
+  category            Category         @relation(fields: [categoryId], references: [id], onDelete: Restrict)
+  tags                Json?
+  specs               Json?
+  details             Json?
+  createdAt           DateTime         @default(now())
+  updatedAt           DateTime         @updatedAt
+  cartItems           CartItem[]
+
+  @@index([categoryId])
+  @@index([featured])
+  @@index([status])
+}
+
+model Cart {
+  id        String     @id @default(cuid())
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+  items     CartItem[]
+
+  @@index([updatedAt])
+}
+
+model CustomerProfile {
+  id              String        @id @default(cuid())
+  fullName        String
+  phone           String        @unique
+  email           String?       @unique
+  defaultLocation String?
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+  orderIntents    OrderIntent[]
+
+  @@index([createdAt])
+}
+
+model CartItem {
+  id               String   @id @default(cuid())
+  cartId           String
+  productId        String
+  quantity         Int      @default(1)
+  unitPriceSnapshot Int
+  discountSnapshot Json
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+  cart             Cart     @relation(fields: [cartId], references: [id], onDelete: Cascade)
+  product          Product  @relation(fields: [productId], references: [id], onDelete: Restrict)
+
+  @@unique([cartId, productId])
+  @@index([cartId])
+  @@index([productId])
+}
+
+model AdminUser {
+  id           String   @id @default(cuid())
+  username     String   @unique
+  passwordHash String
+  createdAt    DateTime @default(now())
+}
+
+model OrderIntent {
+  id           String   @id @default(cuid())
+  cartId       String
+  customerId   String?
+  finalTotal   Int      @default(0)
+  customerInfo Json
+  cartSnapshot Json
+  createdAt    DateTime @default(now())
+  customer     CustomerProfile? @relation(fields: [customerId], references: [id], onDelete: SetNull)
+
+  @@index([cartId])
+  @@index([customerId])
+  @@index([createdAt])
+}

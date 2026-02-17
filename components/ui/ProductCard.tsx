@@ -126,7 +126,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
           setShowActions(false);
         }}
         whileHover={{ y: -8 }}
-        transition={{ duration: 0.4, ease: [0.23, 1, 0.32, 1] }}
+        transition={{ duration: 0.4, ease: [0.23, 1, 0.32, 1] as [number, number, number, number] }}
       >
         {/* Main Card Container */}
         <div className="relative w-full h-full overflow-hidden rounded-2xl sm:rounded-3xl">

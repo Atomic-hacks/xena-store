@@ -1,6 +1,7 @@
 "use client";
 import ProductCard from "@/components/ui/ProductCard";
 import { FaArrowRight } from "react-icons/fa";
+import { logger } from "@/lib/logger";
 
 // Your existing ProductCard types (from paste-2.txt)
 interface ProductCardImage {
@@ -406,17 +407,17 @@ const ProductSection = ({
 }) => {
   // Event handlers for the ProductCard
   const handleAddToCart = (product: ProductCardProduct) => {
-    console.log("Adding to cart:", product);
+    logger.info("ui.discover.addToCart", { productId: product.id });
     // Add your cart logic here
   };
 
   const handleToggleFavorite = (product: ProductCardProduct) => {
-    console.log("Toggling favorite:", product);
+    logger.info("ui.discover.toggleFavorite", { productId: product.id });
     // Add your favorites logic here
   };
 
   const handleViewDetails = (product: ProductCardProduct) => {
-    console.log("Viewing details:", product);
+    logger.info("ui.discover.viewDetails", { productId: product.id });
     // Add your view details logic here (e.g., navigate to product page)
   };
 

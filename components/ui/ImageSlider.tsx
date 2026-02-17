@@ -3,8 +3,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 import { cn } from "@/lib/utils";
-import { motion, AnimatePresence } from "motion/react";
+import { motion, AnimatePresence, type Variants } from "motion/react";
 import React, { useEffect, useState } from "react";
+import { logger } from "@/lib/logger";
 
 export const ImagesSlider = ({
   images,
@@ -59,7 +60,7 @@ export const ImagesSlider = ({
         setLoadedImages(loadedImages as string[]);
         setLoading(false);
       })
-      .catch((error) => console.error("Failed to load images", error));
+      .catch(() => logger.error("ui.imageSlider.load.failed"));
   };
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
@@ -86,7 +87,7 @@ export const ImagesSlider = ({
     };
   }, []);
 
-  const slideVariants = {
+  const slideVariants: Variants = {
     initial: {
       scale: 0,
       opacity: 0,
@@ -96,11 +97,11 @@ export const ImagesSlider = ({
       scale: 1,
       rotateX: 0,
       opacity: 1,
-      transition: {
-        duration: 0.5,
-        ease: [0.645, 0.045, 0.355, 1.0],
+        transition: {
+          duration: 0.5,
+          ease: [0.645, 0.045, 0.355, 1] as [number, number, number, number],
+        },
       },
-    },
     upExit: {
       opacity: 1,
       y: "-150%",

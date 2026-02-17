@@ -1,36 +1,68 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Xena Store
 
-## Getting Started
+Minimal Next.js + Prisma storefront with:
+- product catalog and filters
+- admin product/category management
+- Cloudinary-backed image uploads
+- cookie-based cart and checkout profile sessions
+- WhatsApp checkout link generation
 
-First, run the development server:
+## Environment
+
+Create `.env`:
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+DATABASE_URL="postgresql://postgres:postgres@localhost:5432/xena_store?schema=public"
+WHATSAPP_NUMBER="2348012345678"
+SESSION_SECRET="long_random_secret_value"
+ADMIN_USERNAME="admin"
+ADMIN_PASSWORD="change-me"
+DEBUG="false"
+
+CLOUDINARY_CLOUD_NAME=""
+CLOUDINARY_API_KEY=""
+CLOUDINARY_API_SECRET=""
+CLOUDINARY_UPLOAD_FOLDER="xena-store"
+CLOUDINARY_MAX_UPLOAD_MB="8"
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Local Setup
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+pnpm install
+pnpm prisma:generate
+pnpm prisma:migrate
+pnpm prisma:seed
+pnpm dev
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Production Checklist
 
-## Learn More
+1. Use PostgreSQL for all non-trivial environments.
+2. Set a strong `SESSION_SECRET` (32+ random bytes).
+3. Set `NODE_ENV=production` so session cookies are `secure`.
+4. Configure Cloudinary keys and verify uploads from `/admin/products/new`.
+5. Set `WHATSAPP_NUMBER` in international format (digits only preferred).
+6. Run DB migration in deployment pipeline:
+   - `pnpm prisma:generate`
+   - `pnpm prisma migrate deploy`
+7. Build and start:
+   - `pnpm build`
+   - `pnpm start`
+8. Configure backups for your production database.
+9. Restrict admin credentials and rotate regularly.
+10. Keep `DEBUG=false` in production.
 
-To learn more about Next.js, take a look at the following resources:
+## Key Flows
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- Admin login: `/admin/login`
+- Add products: `/admin/products/new`
+- Edit products: `/admin/products/:id/edit`
+- Checkout profile + checkout: `/checkout`
+- Customer account/history: `/account`
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Notes
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- No `localStorage`/`sessionStorage` is used for cart/auth.
+- Customer profile persistence is cookie-session based and linked to DB records.
+- Checkout history totals are saved per customer in `OrderIntent`.

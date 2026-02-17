@@ -2,6 +2,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Search, X } from "lucide-react";
+import { glassStyles } from "@/components/ui/glass";
 
 interface SearchBarProps {
   value: string;
@@ -40,11 +41,11 @@ const SearchBar: React.FC<SearchBarProps> = ({
     <div className={`relative w-full ${className}`}>
       <motion.div
         className={`
-          relative flex items-center backdrop-blur-xl border rounded-2xl transition-all duration-300 overflow-hidden
+          relative flex items-center rounded-2xl transition-all duration-300 overflow-hidden
           ${
             isFocused
-              ? "bg-black/60 border-fuchsia-500/50 shadow-lg shadow-fuchsia-500/10"
-              : "bg-black/40 border-white/20 hover:border-white/30"
+              ? "border-white/28 bg-white/[0.06] shadow-[0_8px_24px_rgba(0,0,0,0.2)]"
+              : `${glassStyles.input} hover:border-white/25`
           }
         `}
         whileHover={{ scale: 1.01 }}
@@ -54,7 +55,7 @@ const SearchBar: React.FC<SearchBarProps> = ({
         <div className="flex items-center justify-center w-12 h-12">
           <motion.div
             animate={{
-              color: isFocused ? "#d946ef" : "rgba(255, 255, 255, 0.5)",
+              color: isFocused ? "rgba(255, 255, 255, 0.92)" : "rgba(255, 255, 255, 0.5)",
             }}
             transition={{ duration: 0.2 }}
           >
@@ -96,7 +97,7 @@ const SearchBar: React.FC<SearchBarProps> = ({
           className="absolute inset-0 rounded-2xl pointer-events-none"
           animate={{
             boxShadow: isFocused
-              ? "0 0 0 3px rgba(217, 70, 239, 0.1)"
+              ? "0 0 0 3px rgba(255, 255, 255, 0.08)"
               : "0 0 0 0px rgba(217, 70, 239, 0)",
           }}
           transition={{ duration: 0.2 }}
@@ -107,7 +108,7 @@ const SearchBar: React.FC<SearchBarProps> = ({
       <AnimatePresence>
         {isFocused && value.length > 0 && (
           <motion.div
-            className="absolute top-full left-0 right-0 mt-2 bg-black/80 backdrop-blur-xl border border-white/20 rounded-2xl overflow-hidden z-50"
+            className={`absolute left-0 right-0 top-full z-50 mt-2 overflow-hidden rounded-2xl ${glassStyles.cardSoft}`}
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -10 }}
