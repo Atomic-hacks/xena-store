@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Grid2x2, Headset, House, Percent, ShoppingBag, Store, User } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useCart } from "@/components/ui/CartContextProvider";
 import { GlobalProductSearch } from "@/components/layout/GlobalProductSearch";
 
@@ -32,10 +32,32 @@ export default function Navbar() {
   const pathname = usePathname();
   const { cart } = useCart();
   const [scrolled, setScrolled] = useState(false);
+  const [showMobileTabs, setShowMobileTabs] = useState(true);
+  const lastScrollY = useRef(0);
+  const restTimerRef = useRef<number | null>(null);
 
   useEffect(() => {
     function onScroll() {
-      setScrolled(window.scrollY > 8);
+      const currentY = window.scrollY;
+      setScrolled(currentY > 8);
+
+      if (currentY <= 8) {
+        setShowMobileTabs(true);
+      } else if (currentY > lastScrollY.current) {
+        setShowMobileTabs(false);
+      } else if (currentY < lastScrollY.current) {
+        setShowMobileTabs(true);
+      }
+
+      lastScrollY.current = currentY;
+
+      if (restTimerRef.current) {
+        window.clearTimeout(restTimerRef.current);
+      }
+
+      restTimerRef.current = window.setTimeout(() => {
+        setShowMobileTabs(true);
+      }, 180);
     }
 
     window.addEventListener("scroll", onScroll, { passive: true });
@@ -43,6 +65,9 @@ export default function Navbar() {
     return () => {
       window.removeEventListener("scroll", onScroll);
       window.cancelAnimationFrame(raf);
+      if (restTimerRef.current) {
+        window.clearTimeout(restTimerRef.current);
+      }
     };
   }, []);
 
@@ -108,7 +133,11 @@ export default function Navbar() {
         </nav>
       </header>
 
-      <div className="pointer-events-none fixed inset-x-0 bottom-3 z-[60] flex justify-center md:hidden">
+      <div
+        className={`pointer-events-none fixed inset-x-0 bottom-3 z-[60] flex justify-center transition-transform duration-300 md:hidden ${
+          showMobileTabs ? "translate-y-0" : "translate-y-24"
+        }`}
+      >
         <nav className="pointer-events-auto w-[calc(100%-1rem)] max-w-lg rounded-3xl border border-neutral-200 bg-white/95 px-2 py-1.5 shadow-[0_18px_50px_rgba(15,23,42,0.14)] backdrop-blur">
           <ul className="grid grid-cols-6">
             {mobileTabs.map((tab) => {
